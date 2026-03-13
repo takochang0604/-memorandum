@@ -9,10 +9,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- 引入 Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- 🌟 引入 SortableJS (用於拖曳排序) -->
+    <!-- 引入 SortableJS (用於拖曳排序) -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
     <style>
-        /* 隱藏滾動條的輔助樣式 */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -64,7 +63,7 @@
     <!-- 主要內容區 -->
     <div class="p-3 sm:p-6 md:p-8 flex justify-center flex-grow">
 
-        <!-- 帳號密碼雙重防護鎖 -->
+        <!-- 登入容器 -->
         <div id="auth-container" class="w-full max-w-md bg-white rounded-2xl shadow-sm border border-slate-100 p-6 md:p-8 mt-4 md:mt-10 hidden transform transition-all self-start">
             <div class="text-center mb-8">
                 <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-50 text-blue-600 mb-4 shadow-sm">
@@ -74,7 +73,6 @@
                 <p class="text-sm text-slate-500 mt-2 empty:hidden" id="auth-subtitle"></p>
             </div>
 
-            <!-- 頁籤切換：登入 / 建立 -->
             <div class="flex p-1 bg-slate-100 rounded-xl mb-6" id="auth-tabs-container">
                 <button id="tab-login" class="flex-1 py-2 text-sm font-medium rounded-lg bg-white shadow-sm text-slate-900 transition-all">登入現有空間</button>
                 <button id="tab-create" class="flex-1 py-2 text-sm font-medium rounded-lg text-slate-500 hover:text-slate-700 transition-all">建立新空間</button>
@@ -91,33 +89,29 @@
                             class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all font-mono font-bold text-slate-700"
                             required minlength="4">
                     </div>
-
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">空間密碼</label>
                         <div class="relative">
                             <input type="password" id="auth-password" placeholder="請輸入密碼 (最少4碼)"
                                 class="w-full p-3 pr-10 bg-slate-50 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all tracking-widest"
                                 required minlength="4">
-                            <button type="button" id="toggle-password-btn" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors" title="顯示/隱藏密碼">
+                            <button type="button" id="toggle-password-btn" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors">
                                 <i data-lucide="eye" class="w-5 h-5"></i>
                             </button>
                         </div>
                     </div>
                 </div>
-                
                 <p id="auth-error" class="text-red-500 text-sm hidden text-center bg-red-50 py-2 rounded-lg transition-all"></p>
-                
                 <button type="submit" id="auth-submit-btn"
-                    class="w-full flex items-center justify-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-xl font-medium hover:bg-slate-800 transition-all active:scale-95 mt-2 disabled:opacity-70 disabled:cursor-not-allowed">
+                    class="w-full flex items-center justify-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-xl font-medium hover:bg-slate-800 transition-all active:scale-95 mt-2 disabled:opacity-70">
                     <i data-lucide="log-in" class="w-5 h-5"></i>
                     <span id="auth-submit-text">登入空間</span>
                 </button>
             </form>
         </div>
 
-        <!-- 登入後的主要應用畫面 -->
+        <!-- 應用主體 -->
         <div id="app-container" class="w-full max-w-2xl hidden animate-[fadeIn_0.5s_ease-out]">
-
             <header class="mb-6 md:mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2 md:pt-0">
                 <div class="text-center sm:text-left">
                     <h1 class="text-2xl md:text-3xl font-bold text-slate-900 flex items-center justify-center sm:justify-start gap-3">
@@ -128,64 +122,45 @@
                     </h1>
                     <p class="text-sm md:text-base text-slate-500 mt-2">簡單記錄，自由排序。</p>
                 </div>
-
-                <div id="user-profile" class="flex flex-wrap items-center justify-center gap-2 text-xs text-slate-500 bg-white px-3 py-2 rounded-xl border border-slate-200 shadow-sm w-fit mx-auto sm:mx-0 transition-all hover:shadow-md">
+                <div id="user-profile" class="flex flex-wrap items-center justify-center gap-2 text-xs text-slate-500 bg-white px-3 py-2 rounded-xl border border-slate-200 shadow-sm w-fit mx-auto sm:mx-0">
                     <div class="flex items-center gap-1.5 px-2 py-1 bg-blue-50 text-blue-700 rounded-lg">
                         <i data-lucide="user" class="w-3.5 h-3.5"></i>
                         <span class="font-medium">代碼: <span id="room-code-display" class="font-mono font-bold select-all">----</span></span>
                     </div>
                     <div class="w-px h-4 bg-slate-200 mx-1"></div>
                     <button id="logout-btn" class="text-slate-400 hover:text-red-500 hover:bg-red-50 px-2 py-1 rounded transition-colors flex items-center gap-1 font-medium group">
-                        <i data-lucide="log-out" class="w-3 h-3 group-hover:-translate-x-0.5 transition-transform"></i>登出
+                        <i data-lucide="log-out" class="w-3 h-3"></i>登出
                     </button>
                 </div>
             </header>
 
-            <!-- 輸入區塊 -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 md:p-6 mb-6 md:mb-8 transition-shadow focus-within:shadow-md focus-within:border-blue-200">
                 <form id="memo-form" class="flex flex-col gap-5">
-                    
-                    <!-- 1. 先選擇分類 -->
                     <div>
                         <label class="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">歸屬分類</label>
-                        <div class="flex overflow-x-auto gap-2 no-scrollbar w-full pb-1" id="category-selector">
-                            <!-- 分類按鈕透過 JS 渲染 -->
-                        </div>
+                        <div class="flex overflow-x-auto gap-2 no-scrollbar w-full pb-1" id="category-selector"></div>
                     </div>
-
-                    <!-- 2. 文字輸入區 -->
                     <div class="relative w-full">
                         <input type="text" id="memo-input" placeholder="記下要做的事..."
                             class="w-full text-base md:text-lg p-2 md:p-3 pr-10 bg-transparent border-b-2 border-slate-100 focus:border-blue-500 outline-none transition-colors placeholder:text-slate-300"
                             autocomplete="off" />
-                        <button type="button" id="clear-input-btn" class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 focus:outline-none hidden transition-colors" title="清除輸入">
+                        <button type="button" id="clear-input-btn" class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 focus:outline-none hidden">
                             <i data-lucide="x-circle" class="w-5 h-5"></i>
                         </button>
                     </div>
-
-                    <!-- 3. 多圖上傳與預覽專區 -->
                     <div class="flex flex-col gap-3 bg-slate-50/50 p-3 rounded-xl border border-slate-100">
                         <div class="flex items-center justify-between">
-                            <button type="button" id="trigger-image-btn" class="flex items-center gap-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 shadow-sm px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all focus:outline-none">
+                            <button type="button" id="trigger-image-btn" class="flex items-center gap-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 shadow-sm px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
                                 <i data-lucide="image-plus" class="w-4 h-4"></i>
-                                附加圖片 (<span id="image-count">0</span>/5)
+                                附加圖片 (<span id="image-count">0</span> / 5)
                             </button>
                             <input type="file" id="memo-image-input" accept="image/*" multiple max="5" class="hidden" />
                         </div>
-                        
-                        <div id="image-preview-list" class="hidden flex flex-wrap gap-3 mt-1">
-                            <!-- 縮圖將透過 JS 動態產生 -->
-                        </div>
+                        <div id="image-preview-list" class="hidden flex flex-wrap gap-3 mt-1"></div>
                     </div>
-
-                    <!-- 4. 新增/儲存按鈕區塊 -->
                     <div class="flex items-center justify-end gap-3 w-full mt-1">
-                        <button type="button" id="cancel-edit-btn"
-                            class="hidden px-5 py-2.5 rounded-xl font-medium text-slate-500 hover:bg-slate-100 transition-all text-sm">
-                            取消編輯
-                        </button>
-                        <button type="submit" id="submit-btn" disabled
-                            class="flex items-center justify-center gap-2 bg-slate-900 text-white px-8 py-2.5 rounded-xl font-medium hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95 w-full sm:w-auto shadow-sm">
+                        <button type="button" id="cancel-edit-btn" class="hidden px-5 py-2.5 rounded-xl font-medium text-slate-500 hover:bg-slate-100 transition-all text-sm">取消編輯</button>
+                        <button type="submit" id="submit-btn" disabled class="flex items-center justify-center gap-2 bg-slate-900 text-white px-8 py-2.5 rounded-xl font-medium hover:bg-slate-800 disabled:opacity-50 transition-all active:scale-95 shadow-sm">
                             <i data-lucide="plus" class="w-5 h-5"></i>
                             <span>新增</span>
                         </button>
@@ -193,10 +168,7 @@
                 </form>
             </div>
 
-            <!-- 列表區塊 -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative">
-
-                <!-- 搜尋列 -->
                 <div class="p-3 border-b border-slate-100 bg-white relative z-20">
                     <div class="relative w-full">
                         <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
@@ -204,118 +176,69 @@
                             class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-transparent rounded-xl focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all text-sm placeholder:text-slate-400" />
                     </div>
                 </div>
-
-                <!-- 過濾器與清除按鈕 -->
                 <div class="flex items-center justify-between border-b border-slate-100 pr-2 md:pr-3 sticky top-0 bg-white/90 backdrop-blur-md z-10 shadow-sm">
-                    <div class="flex overflow-x-auto no-scrollbar p-2 md:p-3 gap-2" id="filter-tabs">
-                        <!-- 頁籤透過 JS 渲染 -->
-                    </div>
-                    <button id="clear-completed-btn"
-                        class="hidden text-xs font-medium text-slate-400 hover:text-red-600 transition-colors flex items-center gap-1 whitespace-nowrap px-3 py-2 rounded-xl hover:bg-red-50 ml-2 border border-transparent hover:border-red-100">
-                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                        清除已完成
+                    <div class="flex overflow-x-auto no-scrollbar p-2 md:p-3 gap-2" id="filter-tabs"></div>
+                    <button id="clear-completed-btn" class="hidden text-xs font-medium text-slate-400 hover:text-red-600 flex items-center gap-1 px-3 py-2 rounded-xl hover:bg-red-50">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>清除已完成
                     </button>
                 </div>
-
-                <!-- 備忘錄列表 (支援拖曳排序) -->
-                <div class="p-2 md:p-4 min-h-[200px] bg-slate-50/50" id="memo-list-container">
-                    <!-- 列表透過 JS 渲染 -->
-                </div>
+                <div class="p-2 md:p-4 min-h-[200px] bg-slate-50/50" id="memo-list-container"></div>
             </div>
-
         </div>
     </div>
 
-    <!-- TWAI NEWS 頁尾版權標示 (已更新圖標) -->
-    <footer class="w-full text-center pb-8 mt-4 pointer-events-none">
+    <footer class="w-full text-center pb-8 mt-4 pointer-events-none flex flex-col items-center gap-3">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/60 text-slate-500 text-[11px] font-medium border border-slate-200/60 backdrop-blur-sm shadow-sm">
+            <i data-lucide="users" class="w-3.5 h-3.5"></i>
+            累積使用人次：<span id="visitor-count" class="font-mono font-bold text-slate-700 tracking-wider">--</span>
+        </div>
         <a href="https://www.twainews.com.tw/" target="_blank" class="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-blue-600 transition-colors bg-white/70 hover:bg-white px-5 py-2.5 rounded-full shadow-sm border border-slate-200/60 backdrop-blur-sm pointer-events-auto">
-            <!-- 🌟 已成功替換為您的 Firebase 雲端圖片網址 -->
             <img src="https://firebasestorage.googleapis.com/v0/b/memorandum-3abaa.firebasestorage.app/o/gemini-generated-image-w8bmabw8bmabw8bm-1-removebg-preview-2-1_orig.png?alt=media&token=2d3df30f-4cc7-4f28-b15c-0e3de6bdd9e1" alt="TWAI Logo" class="w-5 h-5 rounded-md object-contain" onerror="this.style.display='none'; document.getElementById('twai-fallback-icon').classList.remove('hidden');" />
             <i id="twai-fallback-icon" data-lucide="zap" class="w-4 h-4 hidden"></i>
             TWAI NEWS 製作提供
         </a>
     </footer>
 
-    <!-- 管理分類 Modal -->
+    <!-- 分類管理 Modal -->
     <div id="manage-categories-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 hidden flex-col items-center justify-center p-4 opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-2xl shadow-xl border border-slate-100 w-full max-w-sm overflow-hidden transform transition-all scale-95 flex flex-col max-h-[80vh]" id="manage-categories-modal-card">
-            <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 flex-shrink-0">
-                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                    <i data-lucide="settings-2" class="w-5 h-5 text-blue-500"></i>
-                    管理所有分類
-                </h3>
-                <button type="button" onclick="window.closeManageCategoriesModal()" class="text-slate-400 hover:text-slate-600 transition-colors focus:outline-none bg-white p-1 rounded-md hover:bg-slate-100">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
+        <div class="bg-white rounded-2xl shadow-xl border border-slate-100 w-full max-w-sm overflow-hidden transform transition-all scale-95 flex flex-col max-h-[80vh]">
+            <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2"><i data-lucide="settings-2" class="w-5 h-5 text-blue-500"></i>管理所有分類</h3>
+                <button type="button" onclick="window.closeManageCategoriesModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
-            
             <div class="p-4 overflow-y-auto flex-grow no-scrollbar" id="manage-categories-list"></div>
-
-            <div class="p-4 border-t border-slate-100 flex-shrink-0">
-                <button type="button" onclick="window.openCategoryModal()" class="w-full py-2.5 rounded-xl font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 transition-all text-sm flex items-center justify-center gap-2 focus:outline-none">
-                    <i data-lucide="plus" class="w-4 h-4"></i>
-                    新增分類
-                </button>
+            <div class="p-4 border-t border-slate-100">
+                <button type="button" onclick="window.openCategoryModal()" class="w-full py-2.5 rounded-xl font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 flex items-center justify-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i>新增分類</button>
             </div>
         </div>
     </div>
 
-    <!-- 新增/編輯分類 Modal -->
+    <!-- 編輯分類 Modal -->
     <div id="category-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex-col items-center justify-center p-4 opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-2xl shadow-xl border border-slate-100 w-full max-w-sm overflow-hidden transform transition-all scale-95 flex flex-col max-h-[80vh]" id="category-modal-card">
-            <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 flex-shrink-0">
-                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                    <i data-lucide="tag" class="w-5 h-5 text-blue-500"></i>
-                    <span id="cat-modal-title-text">自訂新分類</span>
-                </h3>
-                <button type="button" onclick="window.closeCategoryModal()" class="text-slate-400 hover:text-slate-600 transition-colors focus:outline-none bg-white p-1 rounded-md hover:bg-slate-100">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
+            <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2"><i data-lucide="tag" class="w-5 h-5 text-blue-500"></i><span id="cat-modal-title-text">自訂新分類</span></h3>
+                <button type="button" onclick="window.closeCategoryModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
-            
             <form id="cat-modal-form" class="p-6 flex flex-col gap-5 overflow-y-auto no-scrollbar">
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1.5">分類名稱</label>
-                    <input type="text" id="cat-modal-input" placeholder="例如：購物、旅遊、專案..."
-                        class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all"
-                        required maxlength="10">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">選擇顏色</label>
-                    <div id="cat-color-selector" class="flex flex-wrap gap-3"></div>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">選擇圖示</label>
-                    <div id="cat-icon-selector" class="grid grid-cols-6 gap-2 max-h-48 overflow-y-auto p-1 -mx-1 no-scrollbar border-y border-slate-50"></div>
-                    <div class="text-[10px] text-slate-400 text-center mt-2 pointer-events-none flex items-center justify-center gap-1">
-                        <i data-lucide="chevrons-up-down" class="w-3 h-3"></i> 上下滑動查看更多圖示
-                    </div>
-                </div>
-
+                <div><label class="block text-sm font-medium text-slate-700 mb-1.5">分類名稱</label><input type="text" id="cat-modal-input" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" required maxlength="10"></div>
+                <div><label class="block text-sm font-medium text-slate-700 mb-2">選擇顏色</label><div id="cat-color-selector" class="flex flex-wrap gap-3"></div></div>
+                <div><label class="block text-sm font-medium text-slate-700 mb-2">選擇圖示</label><div id="cat-icon-selector" class="grid grid-cols-6 gap-2 max-h-48 overflow-y-auto p-1 -mx-1 no-scrollbar border-y border-slate-50"></div></div>
                 <div class="flex gap-3 mt-2">
-                    <button type="button" id="cat-modal-cancel" class="flex-1 py-2.5 rounded-xl font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 transition-all text-sm focus:outline-none">
-                        取消
-                    </button>
-                    <button type="submit" id="cat-modal-submit" disabled class="flex-1 py-2.5 rounded-xl font-medium text-white bg-slate-900 hover:bg-slate-800 disabled:opacity-50 transition-all text-sm flex items-center justify-center gap-2 focus:outline-none shadow-sm">
-                        <span id="cat-modal-submit-text">確定新增</span>
-                    </button>
+                    <button type="button" id="cat-modal-cancel" class="flex-1 py-2.5 rounded-xl font-medium text-slate-600 bg-slate-100 hover:bg-slate-200">取消</button>
+                    <button type="submit" id="cat-modal-submit" disabled class="flex-1 py-2.5 rounded-xl font-medium text-white bg-slate-900 hover:bg-slate-800"><span id="cat-modal-submit-text">確定新增</span></button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Firebase SDK 與 邏輯 -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js';
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';
-        import { getFirestore, collection, onSnapshot, doc, setDoc, getDoc, updateDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
+        import { getFirestore, collection, onSnapshot, doc, setDoc, getDoc, updateDoc, deleteDoc, increment } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
         import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js';
 
-        // ==========================================
-        // 💡 部署專用設定區 💡
-        // ==========================================
+        // --- Firebase Config ---
         let firebaseConfig = {
             apiKey: "AIzaSyBAc8rrFgqOSmrImCZU8vPzJeKIaTTftj4",
             authDomain: "memorandum-3abaa.firebaseapp.com",
@@ -325,24 +248,14 @@
             appId: "1:339882662542:web:a01cd406296720318c07df",
             measurementId: "G-MW4W68Y6KT"
         };
-
-        let isUsingEnvironmentConfig = false;
-        try {
-            if (!firebaseConfig.apiKey && typeof __firebase_config !== 'undefined') {
-                firebaseConfig = JSON.parse(__firebase_config);
-                isUsingEnvironmentConfig = true;
-            }
-        } catch(e) {}
-
+        try { if (!firebaseConfig.apiKey && typeof __firebase_config !== 'undefined') firebaseConfig = JSON.parse(__firebase_config); } catch(e) {}
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'github-memo-app-v2';
-
-        // 初始化 Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         const storage = getStorage(app);
 
-        // 狀態管理
+        // --- 全域狀態宣告 ---
         let memos = [];
         let categories = []; 
         let currentRoomId = null; 
@@ -354,38 +267,28 @@
         let editingMemoId = null;
         let isAuthReady = false;
         let isCreateMode = false;
-        
         let pendingImageFiles = []; 
         let existingImages = [];    
+        let unsubscribeSnapshot = null;
+        let unsubscribeCategories = null;
 
         const INITIAL_WORK_CAT = { label: '工作', icon: 'briefcase', color: 'text-blue-600', bgColor: 'bg-blue-50', activeBg: 'bg-blue-100', borderColor: 'border-blue-200' };
         const INITIAL_PERSONAL_CAT = { label: '私事', icon: 'user', color: 'text-emerald-600', bgColor: 'bg-emerald-50', activeBg: 'bg-emerald-100', borderColor: 'border-emerald-200' };
-
         const COLOR_OPTIONS = [
-            { id: 'purple', color: 'text-purple-600', bgColor: 'bg-purple-50', activeBg: 'bg-purple-100', borderColor: 'border-purple-200', display: 'bg-purple-500' },
-            { id: 'rose', color: 'text-rose-600', bgColor: 'bg-rose-50', activeBg: 'bg-rose-100', borderColor: 'border-rose-200', display: 'bg-rose-500' },
-            { id: 'amber', color: 'text-amber-600', bgColor: 'bg-amber-50', activeBg: 'bg-amber-100', borderColor: 'border-amber-200', display: 'bg-amber-500' },
-            { id: 'indigo', color: 'text-indigo-600', bgColor: 'bg-indigo-50', activeBg: 'bg-indigo-100', borderColor: 'border-indigo-200', display: 'bg-indigo-500' },
-            { id: 'teal', color: 'text-teal-600', bgColor: 'bg-teal-50', activeBg: 'bg-teal-100', borderColor: 'border-teal-200', display: 'bg-teal-500' },
-            { id: 'blue', color: 'text-blue-600', bgColor: 'bg-blue-50', activeBg: 'bg-blue-100', borderColor: 'border-blue-200', display: 'bg-blue-500' },
-            { id: 'emerald', color: 'text-emerald-600', bgColor: 'bg-emerald-50', activeBg: 'bg-emerald-100', borderColor: 'border-emerald-200', display: 'bg-emerald-500' }
+            { id: 'purple', color: 'text-purple-600', bgColor: 'bg-purple-50', borderColor: 'border-purple-200', display: 'bg-purple-500' },
+            { id: 'rose', color: 'text-rose-600', bgColor: 'bg-rose-50', borderColor: 'border-rose-200', display: 'bg-rose-500' },
+            { id: 'amber', color: 'text-amber-600', bgColor: 'bg-amber-50', borderColor: 'border-amber-200', display: 'bg-amber-500' },
+            { id: 'indigo', color: 'text-indigo-600', bgColor: 'bg-indigo-50', borderColor: 'border-indigo-200', display: 'bg-indigo-500' },
+            { id: 'teal', color: 'text-teal-600', bgColor: 'bg-teal-50', borderColor: 'border-teal-200', display: 'bg-teal-500' },
+            { id: 'blue', color: 'text-blue-600', bgColor: 'bg-blue-50', borderColor: 'border-blue-200', display: 'bg-blue-500' },
+            { id: 'emerald', color: 'text-emerald-600', bgColor: 'bg-emerald-50', borderColor: 'border-emerald-200', display: 'bg-emerald-500' }
         ];
-        
-        const ICON_OPTIONS = [
-            'star', 'heart', 'bookmark', 'hash', 'flag', 'tag', 'zap', 'bell', 'calendar', 'clock',
-            'briefcase', 'book', 'graduation-cap', 'pen-tool', 'monitor', 'laptop', 'clipboard-list',
-            'user', 'users', 'home', 'shopping-cart', 'shopping-bag', 'gift',
-            'coffee', 'utensils', 'plane', 'car', 'ticket', 'map-pin', 'tent',
-            'activity', 'dumbbell', 'bike', 'apple', 'trophy', 'medal',
-            'music', 'gamepad-2', 'headset', 'camera', 'film', 'palette', 'tv',
-            'wallet', 'coins', 'credit-card', 'piggy-bank', 'badge-dollar-sign',
-            'cloud', 'sun', 'moon', 'umbrella', 'flame', 'flower', 'leaf', 'sparkles', 'thumbs-up', 'smile'
-        ];
-
+        const ICON_OPTIONS = ['star', 'heart', 'bookmark', 'hash', 'flag', 'tag', 'zap', 'bell', 'calendar', 'clock', 'briefcase', 'book', 'graduation-cap', 'pen-tool', 'monitor', 'laptop', 'clipboard-list', 'user', 'users', 'home', 'shopping-cart', 'shopping-bag', 'gift', 'coffee', 'utensils', 'plane', 'car', 'ticket', 'map-pin', 'tent', 'activity', 'dumbbell', 'bike', 'apple', 'trophy', 'medal', 'music', 'gamepad-2', 'headset', 'camera', 'film', 'palette', 'tv', 'wallet', 'coins', 'credit-card', 'piggy-bank', 'badge-dollar-sign', 'cloud', 'sun', 'moon', 'umbrella', 'flame', 'flower', 'leaf', 'sparkles', 'thumbs-up', 'smile'];
         let newCatColorIndex = 0;
         let newCatIcon = ICON_OPTIONS[0];
+        let editingCategoryId = null;
 
-        // 取得 UI 元素並增加安全檢查，避免 null 錯誤
+        // --- DOM 取得 ---
         const authContainer = document.getElementById('auth-container');
         const appContainer = document.getElementById('app-container');
         const authForm = document.getElementById('auth-form');
@@ -396,19 +299,16 @@
         const togglePasswordBtn = document.getElementById('toggle-password-btn');
         const roomCodeDisplay = document.getElementById('room-code-display');
         const logoutBtn = document.getElementById('logout-btn');
-        
         const memoForm = document.getElementById('memo-form');
         const memoInput = document.getElementById('memo-input');
         const clearInputBtn = document.getElementById('clear-input-btn');
         const submitBtn = document.getElementById('submit-btn');
         const cancelEditBtn = document.getElementById('cancel-edit-btn');
-        
         const triggerImageBtn = document.getElementById('trigger-image-btn');
         const memoImageInput = document.getElementById('memo-image-input');
         const imagePreviewList = document.getElementById('image-preview-list');
         const imageCountSpan = document.getElementById('image-count');
         const searchInput = document.getElementById('search-input');
-
         const categorySelector = document.getElementById('category-selector');
         const filterTabs = document.getElementById('filter-tabs');
         const clearCompletedBtn = document.getElementById('clear-completed-btn');
@@ -424,9 +324,7 @@
         const catModalSubmit = document.getElementById('cat-modal-submit');
         const catModalSubmitText = document.getElementById('cat-modal-submit-text');
 
-        lucide.createIcons();
-
-        // ========== Toast 工具 ==========
+        // --- 工具函數 ---
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
             if (!container) return;
@@ -438,708 +336,254 @@
             container.appendChild(toast);
             lucide.createIcons();
             requestAnimationFrame(() => toast.classList.remove('translate-y-10', 'opacity-0'));
-            setTimeout(() => {
-                toast.classList.add('translate-y-10', 'opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            setTimeout(() => { toast.classList.add('translate-y-10', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
-        // ========== 客製化確認視窗 ==========
         let confirmActionCallback = null;
         function showConfirm(title, desc, onConfirm) {
             if (document.getElementById('confirm-modal-title')) document.getElementById('confirm-modal-title').textContent = title;
             if (document.getElementById('confirm-modal-desc')) document.getElementById('confirm-modal-desc').textContent = desc;
             confirmActionCallback = onConfirm;
             const modal = document.getElementById('confirm-modal');
-            const card = document.getElementById('confirm-modal-card');
             if (modal) modal.classList.remove('hidden');
-            setTimeout(() => { 
-                if (modal) modal.classList.remove('opacity-0'); 
-                if (card) { card.classList.remove('scale-95'); card.classList.add('scale-100'); }
-            }, 10);
+            setTimeout(() => { if (modal) modal.classList.remove('opacity-0'); }, 10);
         }
         function closeConfirm() {
             const modal = document.getElementById('confirm-modal');
-            const card = document.getElementById('confirm-modal-card');
             if (modal) modal.classList.add('opacity-0');
-            if (card) { card.classList.remove('scale-100'); card.classList.add('scale-95'); }
             setTimeout(() => { if (modal) modal.classList.add('hidden'); confirmActionCallback = null; }, 300);
         }
         if (document.getElementById('confirm-modal-cancel')) document.getElementById('confirm-modal-cancel').addEventListener('click', closeConfirm);
         if (document.getElementById('confirm-modal-ok')) document.getElementById('confirm-modal-ok').addEventListener('click', () => { if (confirmActionCallback) confirmActionCallback(); closeConfirm(); });
 
-        // ========== 圖片放大燈箱 (Lightbox) ==========
         const lightboxModal = document.getElementById('lightbox-modal');
         const lightboxImg = document.getElementById('lightbox-img');
         window.openLightbox = (url) => {
             if (lightboxImg) lightboxImg.src = url;
             if (lightboxModal) lightboxModal.classList.remove('hidden');
-            setTimeout(() => { 
-                if (lightboxModal) lightboxModal.classList.remove('opacity-0'); 
-                if (lightboxImg) { lightboxImg.classList.remove('scale-95'); lightboxImg.classList.add('scale-100'); }
-            }, 10);
+            setTimeout(() => { if (lightboxModal) lightboxModal.classList.remove('opacity-0'); }, 10);
         };
         window.closeLightbox = () => {
             if (lightboxModal) lightboxModal.classList.add('opacity-0');
-            if (lightboxImg) { lightboxImg.classList.remove('scale-100'); lightboxImg.classList.add('scale-95'); }
             setTimeout(() => { if (lightboxModal) lightboxModal.classList.add('hidden'); if (lightboxImg) lightboxImg.src = ''; }, 300);
         };
         if (lightboxModal) lightboxModal.addEventListener('click', (e) => { if (e.target === lightboxModal) window.closeLightbox(); });
 
-        // ========== 初始化驗證 ==========
-        const initAuth = async () => {
-            try {
-                if (isUsingEnvironmentConfig && typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            } catch (error) {
-                console.error('連線驗證發生錯誤:', error);
-                if (error.code === 'auth/configuration-not-found' || error.code === 'auth/operation-not-allowed') {
-                    if (document.getElementById('auth-subtitle')) document.getElementById('auth-subtitle').innerHTML = '請確認已在 Firebase 開啟「匿名登入 (Anonymous)」功能。';
-                }
-            }
-        };
-
-        onAuthStateChanged(auth, async (user) => {
-            if (user) { isAuthReady = true; if (authContainer) authContainer.classList.remove('hidden'); }
-        });
-
-        initAuth();
-
         async function hashCredentials(accountId, password) {
             const encoder = new TextEncoder();
-            const data = encoder.encode(accountId.trim() + ":" + password);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(accountId.trim() + ":" + password));
             return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('').substring(0, 24);
-        }
-
-        // 切換登入/建立頁籤
-        if (document.getElementById('tab-login')) document.getElementById('tab-login').addEventListener('click', () => {
-            isCreateMode = false;
-            document.getElementById('tab-login').classList.add('bg-white', 'shadow-sm', 'text-slate-900');
-            if (document.getElementById('tab-create')) document.getElementById('tab-create').classList.remove('bg-white', 'shadow-sm', 'text-slate-900');
-            if (authAccountId) authAccountId.placeholder = '請輸入您的帳號代碼';
-            if (document.getElementById('auto-gen-badge')) document.getElementById('auto-gen-badge').classList.add('hidden');
-            if (document.getElementById('create-hint')) document.getElementById('create-hint').classList.add('hidden');
-            if (authSubmitBtn) authSubmitBtn.innerHTML = '<i data-lucide="log-in" class="w-5 h-5"></i><span>登入空間</span>';
-            lucide.createIcons(); if (authError) authError.classList.add('hidden');
-        });
-
-        if (document.getElementById('tab-create')) document.getElementById('tab-create').addEventListener('click', () => {
-            isCreateMode = true;
-            document.getElementById('tab-create').classList.add('bg-white', 'shadow-sm', 'text-slate-900');
-            if (document.getElementById('tab-login')) document.getElementById('tab-login').classList.remove('bg-white', 'shadow-sm', 'text-slate-900');
-            if (authAccountId) authAccountId.placeholder = '請輸入自訂帳號 (最少4碼)';
-            if (document.getElementById('auto-gen-badge')) document.getElementById('auto-gen-badge').classList.remove('hidden');
-            if (document.getElementById('create-hint')) document.getElementById('create-hint').classList.remove('hidden');
-            if (authSubmitBtn) authSubmitBtn.innerHTML = '<i data-lucide="user-plus" class="w-5 h-5"></i><span>建立並進入</span>';
-            lucide.createIcons(); if (authError) authError.classList.add('hidden');
-        });
-
-        if (togglePasswordBtn) togglePasswordBtn.addEventListener('click', () => {
-            if (!authPassword) return;
-            const isVisible = authPassword.type === 'text';
-            authPassword.type = isVisible ? 'password' : 'text';
-            togglePasswordBtn.innerHTML = `<i data-lucide="${isVisible ? 'eye' : 'eye-off'}" class="w-5 h-5"></i>`;
-            lucide.createIcons();
-        });
-
-        let unsubscribeSnapshot = null;
-        let unsubscribeCategories = null;
-
-        if (authForm) authForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (!isAuthReady) { showToast('請等待資料庫連線完成...', 'info'); return; }
-            if (authError) authError.classList.add('hidden');
-            const accountId = authAccountId ? authAccountId.value.trim() : '';
-            const password = authPassword ? authPassword.value : '';
-
-            if (accountId.includes(' ') || accountId.length < 4 || password.length < 4) {
-                if (authError) { authError.textContent = '帳號與密碼需至少4個字元且無空白！'; authError.classList.remove('hidden'); }
-                return;
-            }
-
-            if (authSubmitBtn) {
-                authSubmitBtn.disabled = true;
-                authSubmitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>處理中...</span>';
-                lucide.createIcons();
-            }
-
-            const restoreAuthBtn = () => {
-                if (authSubmitBtn) {
-                    authSubmitBtn.disabled = false;
-                    authSubmitBtn.innerHTML = isCreateMode ? '<i data-lucide="user-plus" class="w-5 h-5"></i><span>建立並進入</span>' : '<i data-lucide="log-in" class="w-5 h-5"></i><span>登入空間</span>';
-                    lucide.createIcons();
-                }
-            };
-
-            try {
-                const hashedRoomCode = await hashCredentials(accountId, password);
-                const testRoomId = 'memos_v2_' + hashedRoomCode;
-                const profileRef = doc(db, 'artifacts', appId, 'public', 'data', testRoomId, 'room_profile');
-
-                if (isCreateMode) {
-                    const registryRef = doc(db, 'artifacts', appId, 'public', 'data', 'account_registries', accountId);
-                    const registrySnap = await getDoc(registryRef);
-                    if (registrySnap.exists()) {
-                        if (authError) { authError.textContent = '此「帳號代碼」已被使用，請換一個！'; authError.classList.remove('hidden'); }
-                        restoreAuthBtn(); return;
-                    }
-                    
-                    await setDoc(registryRef, { created: Date.now() });
-                    await setDoc(profileRef, { created: Date.now(), accountId: accountId, migratedCategories: true });
-                    
-                    const catsRef = collection(db, 'artifacts', appId, 'public', 'data', testRoomId + '_categories');
-                    await setDoc(doc(catsRef, 'cat_work'), { ...INITIAL_WORK_CAT, createdAt: Date.now() });
-                    await setDoc(doc(catsRef, 'cat_personal'), { ...INITIAL_PERSONAL_CAT, createdAt: Date.now() + 1 });
-                    
-                    currentRoomId = testRoomId; currentAccountId = accountId;
-                    showToast('空間建立成功！');
-                } else {
-                    const profileSnap = await getDoc(profileRef);
-                    if (!profileSnap.exists()) {
-                        if (authError) { authError.textContent = '帳號代碼或密碼錯誤！'; authError.classList.remove('hidden'); }
-                        restoreAuthBtn(); return;
-                    }
-                    if (!profileSnap.data().migratedCategories) {
-                        const catsRef = collection(db, 'artifacts', appId, 'public', 'data', testRoomId + '_categories');
-                        await setDoc(doc(catsRef, 'cat_work'), { ...INITIAL_WORK_CAT, createdAt: Date.now() });
-                        await setDoc(doc(catsRef, 'cat_personal'), { ...INITIAL_PERSONAL_CAT, createdAt: Date.now() + 1 });
-                        await updateDoc(profileRef, { migratedCategories: true });
-                    }
-                    currentRoomId = testRoomId; currentAccountId = accountId;
-                    showToast('登入成功');
-                }
-
-                if (roomCodeDisplay) roomCodeDisplay.textContent = currentAccountId;
-                if (authContainer) authContainer.classList.add('hidden');
-                if (appContainer) appContainer.classList.remove('hidden');
-
-                const catsRef = collection(db, 'artifacts', appId, 'public', 'data', currentRoomId + '_categories');
-                unsubscribeCategories = onSnapshot(catsRef, (snap) => {
-                    categories = []; 
-                    snap.forEach(d => categories.push({ id: d.id, ...d.data() }));
-                    categories.sort((a,b) => a.createdAt - b.createdAt);
-                    
-                    if (categories.length > 0 && (!selectedCategory || !categories.find(c => c.id === selectedCategory))) {
-                        selectedCategory = categories[0].id;
-                    } else if (categories.length === 0) { selectedCategory = null; }
-                    
-                    if (!categories.find(c => c.id === currentFilter) && currentFilter !== 'all') currentFilter = 'all';
-                    renderApp();
-                    if (manageCategoriesModal && !manageCategoriesModal.classList.contains('hidden')) renderManageList();
-                    updateSubmitButtonState();
-                });
-
-                const roomRef = collection(db, 'artifacts', appId, 'public', 'data', currentRoomId);
-                unsubscribeSnapshot = onSnapshot(roomRef, (snap) => {
-                    memos = []; snap.forEach(d => { if(d.id !== 'room_profile') memos.push({ id: d.id, ...d.data() }); });
-                    isLoading = false; renderApp();
-                });
-                restoreAuthBtn();
-
-            } catch (err) {
-                console.error(err);
-                if (authError) { authError.textContent = '系統連線發生錯誤。'; authError.classList.remove('hidden'); }
-                restoreAuthBtn();
-            }
-        });
-
-        if (logoutBtn) logoutBtn.addEventListener('click', () => window.location.reload());
-
-        // ========== 多圖預覽渲染邏輯 ==========
-        function renderImagePreviews() {
-            const total = existingImages.length + pendingImageFiles.length;
-            if (imageCountSpan) imageCountSpan.textContent = total;
-            
-            if (total === 0) {
-                if (imagePreviewList) { imagePreviewList.classList.add('hidden'); imagePreviewList.innerHTML = ''; }
-                return;
-            }
-
-            if (imagePreviewList) {
-                imagePreviewList.classList.remove('hidden');
-                let html = '';
-                existingImages.forEach((img, idx) => {
-                    html += `<div class="relative w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden border border-slate-200 group">
-                        <img src="${img.url}" class="w-full h-full object-cover" />
-                        <button type="button" onclick="window.removeExistingImage(${idx})" class="absolute top-1 right-1 bg-slate-900/60 text-white rounded-full p-0.5 hover:bg-red-500 transition-colors focus:outline-none"><i data-lucide="x" class="w-3 h-3"></i></button>
-                    </div>`;
-                });
-                pendingImageFiles.forEach((file, idx) => {
-                    const src = URL.createObjectURL(file);
-                    html += `<div class="relative w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden border border-blue-200 shadow-sm ring-2 ring-blue-50 group">
-                        <img src="${src}" class="w-full h-full object-cover" />
-                        <button type="button" onclick="window.removePendingImage(${idx})" class="absolute top-1 right-1 bg-slate-900/60 text-white rounded-full p-0.5 hover:bg-red-500 transition-colors focus:outline-none"><i data-lucide="x" class="w-3 h-3"></i></button>
-                    </div>`;
-                });
-                imagePreviewList.innerHTML = html;
-                lucide.createIcons();
-            }
-        }
-
-        window.removeExistingImage = (idx) => { existingImages.splice(idx, 1); renderImagePreviews(); updateSubmitButtonState(); };
-        window.removePendingImage = (idx) => { pendingImageFiles.splice(idx, 1); renderImagePreviews(); updateSubmitButtonState(); };
-
-        if (triggerImageBtn) {
-            triggerImageBtn.addEventListener('click', () => {
-                if (existingImages.length + pendingImageFiles.length >= 5) { showToast('最多只能附加 5 張圖片喔！', 'error'); return; }
-                if (memoImageInput) memoImageInput.click();
-            });
-        }
-
-        if (memoImageInput) {
-            memoImageInput.addEventListener('change', (e) => {
-                const files = Array.from(e.target.files);
-                const currentTotal = existingImages.length + pendingImageFiles.length;
-                if (files.length + currentTotal > 5) {
-                    showToast('已超過上限，只截取前 5 張圖片', 'info');
-                    pendingImageFiles.push(...files.slice(0, 5 - currentTotal));
-                } else { pendingImageFiles.push(...files); }
-                memoImageInput.value = ''; renderImagePreviews(); updateSubmitButtonState();
-            });
-        }
-
-        // ========== 備忘錄互動邏輯 ==========
-        if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-                currentSearch = e.target.value.toLowerCase().trim();
-                renderMemos();
-            });
-        }
-
-        if (memoInput) {
-            memoInput.addEventListener('input', () => {
-                if (clearInputBtn) clearInputBtn.classList.toggle('hidden', memoInput.value.trim().length === 0);
-                updateSubmitButtonState();
-            });
-        }
-
-        if (clearInputBtn) {
-            clearInputBtn.addEventListener('click', () => {
-                if (memoInput) memoInput.value = ''; 
-                if (clearInputBtn) clearInputBtn.classList.add('hidden'); 
-                updateSubmitButtonState(); 
-                if (memoInput) memoInput.focus();
-            });
-        }
-
-        function resetForm() {
-            if (memoInput) memoInput.value = ''; 
-            editingMemoId = null; pendingImageFiles = []; existingImages = [];
-            if (memoImageInput) memoImageInput.value = ''; 
-            renderImagePreviews(); 
-            if (clearInputBtn) clearInputBtn.classList.add('hidden'); 
-            updateSubmitButtonState();
-        }
-
-        if (cancelEditBtn) {
-            cancelEditBtn.addEventListener('click', resetForm);
-        }
-
-        function updateSubmitButtonState() {
-            if (!submitBtn) return;
-            const hasText = memoInput && memoInput.value.trim().length > 0;
-            const hasImage = pendingImageFiles.length > 0 || existingImages.length > 0;
-            submitBtn.disabled = (!hasText && !hasImage) || isLoading || !selectedCategory;
-            const isEditing = !!editingMemoId;
-            submitBtn.innerHTML = isEditing ? '<i data-lucide="save" class="w-5 h-5"></i><span>儲存</span>' : '<i data-lucide="plus" class="w-5 h-5"></i><span>新增</span>';
-            submitBtn.classList.toggle('bg-blue-600', isEditing && (hasText || hasImage));
-            submitBtn.classList.toggle('bg-slate-900', !isEditing && (hasText || hasImage));
-            if (cancelEditBtn) cancelEditBtn.classList.toggle('hidden', !isEditing);
-            lucide.createIcons();
-        }
-
-        if (memoForm) {
-            memoForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                if (!selectedCategory) { showToast('請先建立至少一個分類！', 'error'); return; }
-                const text = memoInput ? memoInput.value.trim() : '';
-                if (!text && pendingImageFiles.length === 0 && existingImages.length === 0) return;
-
-                if (submitBtn) {
-                    submitBtn.disabled = true;
-                    submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>上傳中...</span>';
-                    lucide.createIcons();
-                }
-
-                try {
-                    let newlyUploadedImages = [];
-                    if (pendingImageFiles.length > 0) {
-                        for (const file of pendingImageFiles) {
-                            const path = `memos/${currentRoomId}/${Date.now()}_${file.name}`;
-                            const snapshot = await uploadBytes(ref(storage, path), file);
-                            const url = await getDownloadURL(snapshot.ref);
-                            newlyUploadedImages.push({ url, path });
-                        }
-                    }
-                    const finalImages = [...existingImages, ...newlyUploadedImages];
-
-                    if (editingMemoId) {
-                        const oldMemo = memos.find(m => m.id === editingMemoId);
-                        if (oldMemo) {
-                            const oldImages = oldMemo.images || (oldMemo.imageUrl ? [{ url: oldMemo.imageUrl, path: oldMemo.imagePath }] : []);
-                            const removedImages = oldImages.filter(oldImg => !existingImages.some(eImg => eImg.path === oldImg.path));
-                            
-                            for (const rImg of removedImages) {
-                                if(rImg.path) { try { await deleteObject(ref(storage, rImg.path)); } catch(err) {} }
-                            }
-                            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId, editingMemoId), { text, category: selectedCategory, images: finalImages });
-                            showToast('已更新');
-                        }
-                    } else {
-                        // 初始化 order 為一個負數的 timestamp，確保越新的預設越在上面
-                        await setDoc(doc(collection(db, 'artifacts', appId, 'public', 'data', currentRoomId)), { 
-                            text, category: selectedCategory, completed: false, 
-                            createdAt: Date.now(), 
-                            order: Date.now() * -1, 
-                            images: finalImages 
-                        });
-                        showToast('已新增');
-                    }
-                    resetForm();
-                } catch (err) {
-                    console.error(err); showToast('儲存失敗', 'error');
-                    if (submitBtn) {
-                        submitBtn.disabled = false;
-                        updateSubmitButtonState();
-                    }
-                }
-            });
-        }
-
-        if (memoListContainer) {
-            memoListContainer.addEventListener('click', async (e) => {
-                const id = e.target.closest('[data-id]')?.dataset.id;
-                if (!id) return;
-                if (e.target.closest('.complete-btn')) {
-                    const memo = memos.find(m => m.id === id);
-                    if (memo) await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId, id), { completed: !memo.completed });
-                } else if (e.target.closest('.pin-btn')) {
-                    const memo = memos.find(m => m.id === id);
-                    if (memo) await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId, id), { pinned: !memo.pinned });
-                } else if (e.target.closest('.edit-btn')) {
-                    const memo = memos.find(m => m.id === id);
-                    if (memo) {
-                        editingMemoId = id;
-                        if (memoInput) memoInput.value = memo.text || '';
-                        if (categories.find(c => c.id === memo.category)) selectedCategory = memo.category;
-                        
-                        if (memo.images && memo.images.length > 0) { existingImages = [...memo.images]; } 
-                        else if (memo.imageUrl) { existingImages = [{ url: memo.imageUrl, path: memo.imagePath }]; } 
-                        else { existingImages = []; }
-                        pendingImageFiles = [];
-                        
-                        if (clearInputBtn) clearInputBtn.classList.remove('hidden');
-                        renderImagePreviews(); updateSubmitButtonState();
-                        window.scrollTo({ top: 0, behavior: 'smooth' }); 
-                        if (memoInput) memoInput.focus();
-                    }
-                } else if (e.target.closest('.delete-btn')) {
-                    const memo = memos.find(m => m.id === id);
-                    if (memo) {
-                        showConfirm('刪除備忘錄', '確定要永遠刪除這筆備忘錄嗎？', async () => {
-                            try {
-                                const imgsToDelete = memo.images || (memo.imagePath ? [{path: memo.imagePath}] : []);
-                                for (const img of imgsToDelete) { if(img.path) await deleteObject(ref(storage, img.path)).catch(e => console.log(e)); }
-                                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId, id));
-                                showToast('已刪除', 'info');
-                            } catch (err) { showToast('刪除失敗', 'error'); }
-                        });
-                    }
-                }
-            });
-        }
-
-        if (clearCompletedBtn) {
-            clearCompletedBtn.addEventListener('click', () => {
-                const done = memos.filter(m => m.completed);
-                if (!done.length) return;
-                showConfirm('清除已完成項目', `確定要永遠清除這 ${done.length} 筆備忘錄與其夾帶圖片嗎？`, async () => {
-                    let deletedCount = 0;
-                    for (const m of done) {
-                        try {
-                            const imgsToDelete = m.images || (m.imagePath ? [{path: m.imagePath}] : []);
-                            for (const img of imgsToDelete) { if(img.path) await deleteObject(ref(storage, img.path)).catch(e => console.log(e)); }
-                            await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId, m.id));
-                            deletedCount++;
-                        } catch (error) {}
-                    }
-                    if (deletedCount > 0) showToast(`已清除 ${deletedCount} 筆項目`, 'info');
-                });
-            });
-        }
-
-        function renderApp() {
-            renderCategorySelector();
-            renderFilterTabs();
-            renderMemos();
-            lucide.createIcons();
-        }
-
-        function renderCategorySelector() {
-            if (!categorySelector) return;
-            if (categories.length === 0) {
-                categorySelector.innerHTML = `<span class="text-sm text-slate-400 py-2 px-1 flex items-center gap-2"><i data-lucide="alert-circle" class="w-4 h-4"></i>請先新增分類</span>`;
-            } else {
-                categorySelector.innerHTML = categories.map(c => `
-                    <button type="button" onclick="window.selectCategory('${c.id}')" class="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all ${selectedCategory === c.id ? `${c.bgColor} ${c.color} ring-1 ring-inset ${c.borderColor} shadow-sm` : 'bg-slate-50 text-slate-500 hover:bg-slate-100'}">
-                        <i data-lucide="${c.icon}" class="w-4 h-4"></i> ${c.label}
-                    </button>
-                `).join('');
-            }
-            categorySelector.innerHTML += `<button type="button" onclick="window.openManageCategoriesModal()" class="flex-shrink-0 flex items-center gap-1 px-3 py-2 rounded-full text-sm font-medium transition-all bg-white border border-dashed border-slate-300 text-slate-400 hover:text-slate-600 hover:border-slate-400 hover:bg-slate-50"><i data-lucide="settings-2" class="w-4 h-4"></i>管理</button>`;
-        }
-
-        function renderFilterTabs() {
-            if (!filterTabs) return;
-            let tabsHtml = `
-                <button onclick="window.setFilter('all')" class="flex-shrink-0 px-4 py-2 md:px-5 md:py-2.5 text-sm transition-all duration-200 rounded-xl flex items-center gap-2 ${currentFilter === 'all' ? 'bg-slate-800 text-white font-bold shadow-md shadow-slate-200 scale-[1.02] -translate-y-[1px]' : 'bg-transparent text-slate-500 hover:bg-slate-100 font-medium'}">
-                    <i data-lucide="layers" class="w-4 h-4 ${currentFilter === 'all' ? 'text-blue-300' : 'text-slate-400'}"></i>全部事項
-                </button>
-            `;
-            tabsHtml += categories.map(c => {
-                const isActive = currentFilter === c.id;
-                const activeClasses = `${c.bgColor} ${c.color} shadow-md ring-1 ring-inset ${c.borderColor} font-bold scale-[1.02] -translate-y-[1px]`;
-                return `<button onclick="window.setFilter('${c.id}')" class="group flex-shrink-0 px-4 py-2 md:px-5 md:py-2.5 text-sm transition-all duration-200 rounded-xl flex items-center gap-2 ${isActive ? activeClasses : 'bg-transparent text-slate-500 hover:bg-slate-100 font-medium'}">
-                    <i data-lucide="${c.icon}" class="w-4 h-4 ${isActive ? '' : 'text-slate-400 group-hover:text-slate-500'}"></i>${c.label}
-                </button>`;
-            }).join('');
-            filterTabs.innerHTML = tabsHtml;
         }
 
         function formatTime(ts) {
             if(!ts) return '';
-            const date = new Date(ts);
-            const now = new Date();
-            const timeStr = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-            return (date.toDateString() === now.toDateString()) ? `今天 ${timeStr}` : `${date.getMonth() + 1}/${date.getDate()} ${timeStr}`;
+            const d = new Date(ts); const now = new Date(); const t = `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+            return (d.toDateString() === now.toDateString()) ? `今天 ${t}` : `${d.getMonth() + 1}/${d.getDate()} ${t}`;
         }
 
-        function renderMemos() {
-            if (!memoListContainer) return;
-            if (isLoading) {
-                memoListContainer.innerHTML = `<div class="py-12 flex flex-col items-center justify-center text-slate-400"><i data-lucide="loader-2" class="w-8 h-8 mb-3 animate-spin text-blue-500"></i><p>讀取中...</p></div>`;
-                return;
+        // --- 初始化與驗證 ---
+        const initAuth = async () => {
+            try { 
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    try { await signInWithCustomToken(auth, __initial_auth_token); } catch (e) { await signInAnonymously(auth); }
+                } else { await signInAnonymously(auth); }
             }
-            
-            const filtered = memos.filter(m => {
-                const matchCat = currentFilter === 'all' || m.category === currentFilter;
-                const matchSearch = currentSearch === '' || (m.text && m.text.toLowerCase().includes(currentSearch));
-                return matchCat && matchSearch;
-            }).sort((a,b) => {
-                if (a.completed !== b.completed) return a.completed ? 1 : -1;
-                if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
-                
-                // 使用 order 欄位進行拖曳排序支援
-                const orderA = a.order !== undefined ? a.order : (a.createdAt * -1);
-                const orderB = b.order !== undefined ? b.order : (b.createdAt * -1);
-                return orderA - orderB;
-            });
+            catch (error) { console.error(error); if (document.getElementById('auth-subtitle')) document.getElementById('auth-subtitle').innerHTML = '資料庫連線異常，請重新整理。'; }
+        };
 
-            if (clearCompletedBtn) {
-                clearCompletedBtn.classList.toggle('hidden', !memos.some(m => m.completed));
-            }
-            
-            if (!filtered.length) {
-                memoListContainer.innerHTML = `<div class="py-16 text-center text-slate-400"><i data-lucide="search-x" class="w-12 h-12 mx-auto mb-3 opacity-20"></i><p class="font-medium text-sm">沒有找到相關紀錄</p></div>`;
-                return;
-            }
-
-            // 使用 Grid 佈局搭配 SortableJS 拖曳
-            memoListContainer.innerHTML = `<ul class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-2" id="sortable-list">` + filtered.map(m => {
-                const c = categories.find(cat => cat.id === m.category) || { label: '已刪除分類', icon: 'help-circle', color: 'text-slate-500', bgColor: 'bg-slate-100' };
-                
-                let imageHtml = '';
-                const imgs = m.images || (m.imageUrl ? [{url: m.imageUrl, path: m.imagePath}] : []);
-                if (imgs.length > 0) {
-                    const gridCols = imgs.length === 1 ? 'grid-cols-1' : (imgs.length === 2 ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-3');
-                    const imgTags = imgs.map(img => `
-                        <div class="aspect-square rounded-lg overflow-hidden border border-slate-100 bg-slate-50 cursor-zoom-in hover:opacity-90 transition-opacity">
-                            <img src="${img.url}" class="w-full h-full object-cover" onclick="window.openLightbox('${img.url}')" />
-                        </div>
-                    `).join('');
-                    imageHtml = `<div class="mt-3 mb-1 grid ${gridCols} gap-2">${imgTags}</div>`;
-                }
-
-                const pinBtnClass = m.pinned ? 'text-amber-500 bg-amber-50 shadow-sm border border-amber-100' : 'text-slate-300 hover:text-slate-500 hover:bg-slate-100 bg-white/50';
-
-                return `<li data-id="${m.id}" class="break-inside-avoid flex flex-col p-4 rounded-2xl transition-all border ${m.completed ? 'bg-slate-50/50 border-slate-100 opacity-70 shadow-sm' : 'bg-white border-slate-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.05)] hover:shadow-md'} relative group">
-                    <div class="flex items-start justify-between mb-2 gap-2">
-                        <div class="flex items-center gap-1">
-                            <!-- 🌟 拖曳把手 -->
-                            <div class="drag-handle cursor-grab active:cursor-grabbing p-1.5 -ml-2 text-slate-300 hover:text-slate-500 touch-none" title="拖曳排序">
-                                <i data-lucide="grip-vertical" class="w-5 h-5"></i>
-                            </div>
-                            <button data-id="${m.id}" class="complete-btn p-1 shrink-0 transition-colors ${m.completed ? 'text-blue-500' : 'text-slate-300 hover:text-blue-400'}"><i data-lucide="${m.completed ? 'check-circle-2' : 'circle'}" class="w-6 h-6"></i></button>
-                        </div>
-                        <div class="flex gap-1.5 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-                            <button data-id="${m.id}" class="pin-btn p-1.5 rounded-lg transition-all ${pinBtnClass}" title="置頂"><i data-lucide="pin" class="w-4 h-4 ${m.pinned ? 'fill-current' : ''}"></i></button>
-                            <button data-id="${m.id}" class="edit-btn p-1.5 text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-colors"><i data-lucide="pencil" class="w-4 h-4"></i></button>
-                            <button data-id="${m.id}" class="delete-btn p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                        </div>
-                    </div>
-                    <div class="flex-grow min-w-0 mb-4">
-                        <p class="text-sm md:text-base font-medium break-words leading-relaxed ${m.completed ? 'text-slate-400 line-through' : 'text-slate-800'}">${m.text || '<span class="text-slate-400 italic">無文字說明</span>'}</p>
-                        ${imageHtml}
-                    </div>
-                    <div class="mt-auto flex items-center justify-between pt-3 border-t border-slate-100/80">
-                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium ${c.bgColor} ${c.color}"><i data-lucide="${c.icon}" class="w-3 h-3"></i>${c.label}</span>
-                        <span class="text-[11px] text-slate-400 font-medium bg-slate-50 px-2 py-0.5 rounded-md border border-slate-100 tracking-wider">${formatTime(m.createdAt)}</span>
-                    </div>
-                </li>`;
-            }).join('') + `</ul>`;
-
-            // 🌟 初始化 SortableJS 拖曳排序
-            const listEl = document.getElementById('sortable-list');
-            if (listEl && !isLoading) {
-                new Sortable(listEl, {
-                    handle: '.drag-handle',
-                    animation: 150,
-                    ghostClass: 'opacity-40', // 拖曳時呈現半透明
-                    onEnd: async function () {
-                        const itemEls = Array.from(listEl.children);
-                        const updates = [];
-                        const baseOrder = Date.now() * -1; // 使用極小負數作為新排序基準，確保不會和新建立(預設也在頂部)的項目衝突
-                        
-                        itemEls.forEach((el, index) => {
-                            const id = el.dataset.id;
-                            const memo = memos.find(m => m.id === id);
-                            if (memo) {
-                                const newOrder = baseOrder + index; // 越上面數字越小 (排在越前面)
-                                updates.push({ id, order: newOrder });
-                                memo.order = newOrder; // 先更新本地記憶體避免畫面閃爍
-                            }
-                        });
-
-                        if (updates.length > 0) {
-                            try {
-                                for (const u of updates) {
-                                    const memoRef = doc(db, 'artifacts', appId, 'public', 'data', currentRoomId, u.id);
-                                    await updateDoc(memoRef, { order: u.order });
-                                }
-                            } catch(e) {
-                                console.error('排序儲存失敗', e);
-                            }
-                        }
-                    }
+        onAuthStateChanged(auth, async (user) => {
+            if (user) { 
+                isAuthReady = true; if (authContainer) authContainer.classList.remove('hidden'); 
+                const statsRef = doc(db, 'artifacts', appId, 'public', 'data', 'app_stats', 'visitor_count');
+                onSnapshot(statsRef, (docSnap) => {
+                    const el = document.getElementById('visitor-count');
+                    if (el) el.textContent = (docSnap.exists() ? (docSnap.data().count || 0) : 0).toLocaleString();
                 });
+                if (!sessionStorage.getItem('twai_memo_counted')) {
+                    try { 
+                        const snap = await getDoc(statsRef); 
+                        if (!snap.exists()) await setDoc(statsRef, { count: 1 }); 
+                        else await updateDoc(statsRef, { count: increment(1) }); 
+                        sessionStorage.setItem('twai_memo_counted', 'true'); 
+                    } catch (e) { console.error(e); }
+                }
             }
+        });
+        initAuth();
+
+        // --- 頁面邏輯 ---
+        if (document.getElementById('tab-login')) document.getElementById('tab-login').addEventListener('click', () => {
+            isCreateMode = false; document.getElementById('tab-login').classList.add('bg-white', 'shadow-sm', 'text-slate-900');
+            if (document.getElementById('tab-create')) document.getElementById('tab-create').classList.remove('bg-white', 'shadow-sm', 'text-slate-900');
+            if (authAccountId) authAccountId.placeholder = '請輸入您的帳號代碼';
+            if (authSubmitBtn) authSubmitBtn.innerHTML = '<i data-lucide="log-in" class="w-5 h-5"></i><span>登入空間</span>';
+            lucide.createIcons(); if (authError) authError.classList.add('hidden');
+        });
+        if (document.getElementById('tab-create')) document.getElementById('tab-create').addEventListener('click', () => {
+            isCreateMode = true; document.getElementById('tab-create').classList.add('bg-white', 'shadow-sm', 'text-slate-900');
+            if (document.getElementById('tab-login')) document.getElementById('tab-login').classList.remove('bg-white', 'shadow-sm', 'text-slate-900');
+            if (authAccountId) authAccountId.placeholder = '請輸入自訂帳號 (最少4碼)';
+            if (authSubmitBtn) authSubmitBtn.innerHTML = '<i data-lucide="user-plus" class="w-5 h-5"></i><span>建立並進入</span>';
+            lucide.createIcons(); if (authError) authError.classList.add('hidden');
+        });
+        if (togglePasswordBtn) togglePasswordBtn.addEventListener('click', () => { const isV = authPassword.type === 'text'; authPassword.type = isV ? 'password' : 'text'; togglePasswordBtn.innerHTML = `<i data-lucide="${isV ? 'eye' : 'eye-off'}" class="w-5 h-5"></i>`; lucide.createIcons(); });
+
+        if (authForm) authForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); if (!isAuthReady) { showToast('資料庫連線中...', 'info'); return; }
+            if (authError) authError.classList.add('hidden');
+            const aid = authAccountId.value.trim(); const pw = authPassword.value;
+            if (aid.length < 4 || pw.length < 4) { if (authError) { authError.textContent = '長度不足！'; authError.classList.remove('hidden'); } return; }
+            authSubmitBtn.disabled = true; authSubmitBtn.innerHTML = '<i data-lucide="loader-2" class="animate-spin"></i><span>處理中...</span>'; lucide.createIcons();
+            try {
+                const hCode = await hashCredentials(aid, pw); const rId = 'memos_v2_' + hCode; const pRef = doc(db, 'artifacts', appId, 'public', 'data', rId, 'room_profile');
+                if (isCreateMode) {
+                    const rRef = doc(db, 'artifacts', appId, 'public', 'data', 'account_registries', aid);
+                    if ((await getDoc(rRef)).exists()) { authError.textContent = '帳號已被使用！'; authError.classList.remove('hidden'); }
+                    else { await setDoc(rRef, { created: Date.now() }); await setDoc(pRef, { created: Date.now(), accountId: aid, migratedCategories: true }); const catsRef = collection(db, 'artifacts', appId, 'public', 'data', rId + '_categories'); await setDoc(doc(catsRef, 'cat_work'), { ...INITIAL_WORK_CAT, createdAt: Date.now() }); await setDoc(doc(catsRef, 'cat_personal'), { ...INITIAL_PERSONAL_CAT, createdAt: Date.now() + 1 }); currentRoomId = rId; currentAccountId = aid; showToast('建立成功！'); }
+                } else {
+                    const pSnap = await getDoc(pRef);
+                    if (!pSnap.exists()) { authError.textContent = '帳號或密碼錯誤！'; authError.classList.remove('hidden'); }
+                    else { currentRoomId = rId; currentAccountId = aid; showToast('登入成功'); }
+                }
+                if (currentRoomId) {
+                    roomCodeDisplay.textContent = currentAccountId; authContainer.classList.add('hidden'); appContainer.classList.remove('hidden');
+                    unsubscribeCategories = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', currentRoomId + '_categories'), (snap) => { categories = []; snap.forEach(d => categories.push({ id: d.id, ...d.data() })); categories.sort((a,b) => a.createdAt - b.createdAt); if (categories.length > 0 && !selectedCategory) selectedCategory = categories[0].id; renderApp(); });
+                    unsubscribeSnapshot = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', currentRoomId), (snap) => { memos = []; snap.forEach(d => { if(d.id !== 'room_profile') memos.push({ id: d.id, ...d.data() }); }); isLoading = false; renderApp(); });
+                }
+            } catch (err) { console.error(err); showToast('發生錯誤', 'error'); }
+            authSubmitBtn.disabled = false; authSubmitBtn.innerHTML = isCreateMode ? '<i data-lucide="user-plus"></i><span>建立並進入</span>' : '<i data-lucide="log-in"></i><span>登入空間</span>'; lucide.createIcons();
+        });
+
+        if (logoutBtn) logoutBtn.addEventListener('click', () => window.location.reload());
+
+        // --- 功能模組 ---
+        if (triggerImageBtn) triggerImageBtn.addEventListener('click', () => { if (existingImages.length + pendingImageFiles.length >= 5) showToast('最多 5 張圖片！', 'error'); else memoImageInput.click(); });
+        if (memoImageInput) memoImageInput.addEventListener('change', (e) => { const files = Array.from(e.target.files); const cur = existingImages.length + pendingImageFiles.length; pendingImageFiles.push(...files.slice(0, 5 - cur)); memoImageInput.value = ''; renderImagePreviews(); updateSubmitButtonState(); });
+        window.removeExistingImage = (idx) => { existingImages.splice(idx, 1); renderImagePreviews(); updateSubmitButtonState(); };
+        window.removePendingImage = (idx) => { pendingImageFiles.splice(idx, 1); renderImagePreviews(); updateSubmitButtonState(); };
+        function renderImagePreviews() {
+            imageCountSpan.textContent = existingImages.length + pendingImageFiles.length;
+            if (existingImages.length + pendingImageFiles.length === 0) { imagePreviewList.classList.add('hidden'); return; }
+            imagePreviewList.classList.remove('hidden');
+            let h = '';
+            existingImages.forEach((img, i) => h += `<div class="relative w-16 h-16 rounded-lg overflow-hidden border border-slate-200"><img src="${img.url}" class="w-full h-full object-cover"><button type="button" onclick="window.removeExistingImage(${i})" class="absolute top-1 right-1 bg-black/50 text-white rounded-full p-0.5"><i data-lucide="x" class="w-3 h-3"></i></button></div>`);
+            pendingImageFiles.forEach((f, i) => h += `<div class="relative w-16 h-16 rounded-lg overflow-hidden border border-blue-200"><img src="${URL.createObjectURL(f)}" class="w-full h-full object-cover"><button type="button" onclick="window.removePendingImage(${i})" class="absolute top-1 right-1 bg-black/50 text-white rounded-full p-0.5"><i data-lucide="x" class="w-3 h-3"></i></button></div>`);
+            imagePreviewList.innerHTML = h; lucide.createIcons();
         }
 
-        window.selectCategory = (id) => { selectedCategory = id; renderApp(); updateSubmitButtonState(); };
-        window.setFilter = (id) => { currentFilter = id; renderApp(); };
-        window.openManageCategoriesModal = () => { renderManageList(); if(manageCategoriesModal) manageCategoriesModal.classList.remove('hidden'); setTimeout(() => { if(manageCategoriesModal) manageCategoriesModal.classList.remove('opacity-0'); }, 10); };
-        window.closeManageCategoriesModal = () => { if(manageCategoriesModal) manageCategoriesModal.classList.add('opacity-0'); setTimeout(() => { if(manageCategoriesModal) manageCategoriesModal.classList.add('hidden'); }, 300); };
-        
-        function renderManageList() {
-            if (!manageCategoriesList) return;
-            manageCategoriesList.innerHTML = categories.length ? `<ul class="space-y-2">` + categories.map(c => `<li class="flex items-center justify-between p-3 rounded-xl border border-slate-100">
-                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full ${c.bgColor} ${c.color} flex items-center justify-center"><i data-lucide="${c.icon}" class="w-4 h-4"></i></div><span class="text-sm font-medium">${c.label}</span></div>
-                <div><button onclick="window.editCategory('${c.id}')" class="p-2 text-slate-400 hover:text-blue-500 transition-colors focus:outline-none"><i data-lucide="pencil" class="w-4 h-4"></i></button><button onclick="window.deleteCategory('${c.id}')" class="p-2 text-slate-400 hover:text-red-500 transition-colors focus:outline-none"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>
-            </li>`).join('') + `</ul>` : `<div class="py-8 text-center text-slate-400"><i data-lucide="tags" class="w-10 h-10 mb-2 mx-auto opacity-20"></i><p class="text-sm">尚無分類，請新增</p></div>`;
+        if (searchInput) searchInput.addEventListener('input', (e) => { currentSearch = e.target.value.toLowerCase().trim(); renderMemos(); });
+        if (memoInput) memoInput.addEventListener('input', () => { clearInputBtn.classList.toggle('hidden', memoInput.value.trim().length === 0); updateSubmitButtonState(); });
+        if (clearInputBtn) clearInputBtn.addEventListener('click', () => { memoInput.value = ''; clearInputBtn.classList.add('hidden'); updateSubmitButtonState(); memoInput.focus(); });
+        if (cancelEditBtn) cancelEditBtn.addEventListener('click', () => { memoInput.value = ''; editingMemoId = null; existingImages = []; pendingImageFiles = []; renderImagePreviews(); cancelEditBtn.classList.add('hidden'); updateSubmitButtonState(); });
+
+        function updateSubmitButtonState() {
+            const hasC = !!selectedCategory; const hasT = memoInput.value.trim().length > 0 || pendingImageFiles.length > 0 || existingImages.length > 0;
+            submitBtn.disabled = !hasC || !hasT || isLoading;
+            submitBtn.innerHTML = editingMemoId ? '<i data-lucide="save"></i><span>儲存</span>' : '<i data-lucide="plus"></i><span>新增</span>'; lucide.createIcons();
+        }
+
+        if (memoForm) memoForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); if (!selectedCategory || submitBtn.disabled) return;
+            submitBtn.disabled = true; submitBtn.innerHTML = '<i data-lucide="loader-2" class="animate-spin"></i><span>上傳中...</span>'; lucide.createIcons();
+            try {
+                let newly = [];
+                for (const f of pendingImageFiles) { const p = `memos/${currentRoomId}/${Date.now()}_${f.name}`; const snap = await uploadBytes(ref(storage, p), f); const url = await getDownloadURL(snap.ref); newly.push({ url, path: p }); }
+                const final = [...existingImages, ...newly];
+                if (editingMemoId) {
+                    const old = memos.find(m => m.id === editingMemoId);
+                    const oldImgs = old.images || (old.imageUrl ? [{url: old.imageUrl, path: old.imagePath}] : []);
+                    for (const o of oldImgs) { if (!existingImages.some(e => e.path === o.path) && o.path) await deleteObject(ref(storage, o.path)).catch(e => console.error(e)); }
+                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId, editingMemoId), { text: memoInput.value.trim(), category: selectedCategory, images: final });
+                } else {
+                    await setDoc(doc(collection(db, 'artifacts', appId, 'public', 'data', currentRoomId)), { text: memoInput.value.trim(), category: selectedCategory, completed: false, createdAt: Date.now(), order: Date.now() * -1, images: final });
+                }
+                memoInput.value = ''; editingMemoId = null; existingImages = []; pendingImageFiles = []; renderImagePreviews(); clearInputBtn.classList.add('hidden'); cancelEditBtn.classList.add('hidden');
+            } catch (err) { console.error(err); showToast('儲存失敗', 'error'); }
+            updateSubmitButtonState();
+        });
+
+        // --- 介面渲染 ---
+        function renderApp() { renderCategorySelector(); renderFilterTabs(); renderMemos(); }
+        function renderCategorySelector() {
+            if (!categorySelector) return;
+            if (categories.length === 0) categorySelector.innerHTML = '<span class="text-xs text-slate-400">請先新增分類</span>';
+            else categorySelector.innerHTML = categories.map(c => `<button type="button" onclick="window.selectCategory('${c.id}')" class="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all ${selectedCategory === c.id ? `${c.bgColor} ${c.color} ring-1 ring-inset ${c.borderColor} shadow-sm` : 'bg-slate-50 text-slate-500'}"><i data-lucide="${c.icon}" class="w-4 h-4"></i>${c.label}</button>`).join('');
+            categorySelector.innerHTML += `<button type="button" onclick="window.openManageCategoriesModal()" class="flex-shrink-0 flex items-center gap-1 px-3 py-2 rounded-full text-sm font-medium bg-white border border-dashed border-slate-300 text-slate-400"><i data-lucide="settings-2" class="w-4 h-4"></i>管理</button>`;
             lucide.createIcons();
         }
+        function renderFilterTabs() {
+            if (!filterTabs) return;
+            let h = `<button onclick="window.setFilter('all')" class="flex-shrink-0 px-4 py-2 text-sm rounded-xl flex items-center gap-2 ${currentFilter === 'all' ? 'bg-slate-800 text-white font-bold' : 'text-slate-500'}"><i data-lucide="layers" class="w-4 h-4"></i>全部</button>`;
+            h += categories.map(c => `<button onclick="window.setFilter('${c.id}')" class="flex-shrink-0 px-4 py-2 text-sm rounded-xl flex items-center gap-2 ${currentFilter === c.id ? `${c.bgColor} ${c.color} shadow-sm font-bold` : 'text-slate-500'}"><i data-lucide="${c.icon}" class="w-4 h-4"></i>${c.label}</button>`).join('');
+            filterTabs.innerHTML = h; lucide.createIcons();
+        }
+        function renderMemos() {
+            if (!memoListContainer) return;
+            if (isLoading) { memoListContainer.innerHTML = '<div class="py-12 text-center text-slate-400"><i data-lucide="loader-2" class="animate-spin w-8 h-8 mx-auto mb-2"></i>讀取中...</div>'; lucide.createIcons(); return; }
+            const filtered = memos.filter(m => (currentFilter === 'all' || m.category === currentFilter) && (!currentSearch || m.text.toLowerCase().includes(currentSearch))).sort((a,b) => { if (a.completed !== b.completed) return a.completed ? 1 : -1; if (a.pinned !== b.pinned) return a.pinned ? -1 : 1; const oa = a.order || (a.createdAt * -1); const ob = b.order || (b.createdAt * -1); return oa - ob; });
+            clearCompletedBtn.classList.toggle('hidden', !memos.some(m => m.completed));
+            if (!filtered.length) { memoListContainer.innerHTML = '<div class="py-12 text-center text-slate-400 text-sm">尚無內容</div>'; return; }
+            memoListContainer.innerHTML = `<ul class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-2" id="sortable-list">` + filtered.map(m => {
+                const c = categories.find(cat => cat.id === m.category) || { label: '未分類', icon: 'help-circle', color: 'text-slate-500', bgColor: 'bg-slate-100' };
+                const imgs = m.images || (m.imageUrl ? [{url: m.imageUrl, path: m.imagePath}] : []);
+                let imgH = imgs.length ? `<div class="mt-3 grid ${imgs.length === 1 ? 'grid-cols-1' : (imgs.length === 2 ? 'grid-cols-2' : 'grid-cols-3')} gap-2">${imgs.map(i => `<div class="aspect-square rounded-lg overflow-hidden border border-slate-100 cursor-zoom-in"><img src="${i.url}" class="w-full h-full object-cover" onclick="window.openLightbox('${i.url}')"></div>`).join('')}</div>` : '';
+                return `<li data-id="${m.id}" class="flex flex-col p-4 rounded-2xl border ${m.completed ? 'bg-slate-50/50 opacity-70' : 'bg-white shadow-sm'} relative group"><div class="flex items-start justify-between mb-2"><div class="flex items-center gap-1"><div class="drag-handle cursor-grab text-slate-300 p-1 -ml-2"><i data-lucide="grip-vertical" class="w-5 h-5"></i></div><button class="complete-btn p-1 ${m.completed ? 'text-blue-500' : 'text-slate-300'}" onclick="window.toggleComplete('${m.id}')"><i data-lucide="${m.completed ? 'check-circle-2' : 'circle'}"></i></button></div><div class="flex gap-1.5 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity"><button onclick="window.togglePin('${m.id}')" class="p-1.5 rounded-lg ${m.pinned ? 'text-amber-500 bg-amber-50' : 'text-slate-300'}"><i data-lucide="pin" class="w-4 h-4 ${m.pinned ? 'fill-current' : ''}"></i></button><button onclick="window.editMemo('${m.id}')" class="p-1.5 text-slate-400"><i data-lucide="pencil" class="w-4 h-4"></i></button><button onclick="window.deleteMemo('${m.id}')" class="p-1.5 text-slate-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></div><div class="flex-grow text-sm md:text-base ${m.completed ? 'text-slate-400 line-through' : 'text-slate-800'}">${m.text || '無內容'} ${imgH}</div><div class="mt-auto flex items-center justify-between pt-3 border-t border-slate-100/80 mt-4"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium ${c.bgColor} ${c.color}"><i data-lucide="${c.icon}" class="w-3 h-3"></i>${c.label}</span><span class="text-[11px] text-slate-400">${formatTime(m.createdAt)}</span></div></li>`;
+            }).join('') + '</ul>';
+            lucide.createIcons();
+            const listEl = document.getElementById('sortable-list');
+            if (listEl && !isLoading) new Sortable(listEl, { handle: '.drag-handle', animation: 150, onEnd: async () => { const els = Array.from(listEl.children); const base = Date.now() * -1; for (let i=0; i<els.length; i++) { const id = els[i].dataset.id; await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId, id), { order: base + i }); } } });
+        }
 
-        window.openCategoryModal = (id = null) => {
-            editingCategoryId = id;
-            if (id) {
-                const c = categories.find(cat => cat.id === id);
-                if (c) {
-                    if (catModalTitleText) catModalTitleText.textContent = '編輯分類'; 
-                    if (catModalInput) catModalInput.value = c.label; 
-                    newCatIcon = c.icon;
-                    newCatColorIndex = COLOR_OPTIONS.findIndex(o => o.color === c.color);
-                    if(newCatColorIndex === -1) newCatColorIndex = 0;
-                }
-            } else {
-                if (catModalTitleText) catModalTitleText.textContent = '自訂新分類'; 
-                if (catModalInput) catModalInput.value = ''; 
-                newCatIcon = ICON_OPTIONS[0]; newCatColorIndex = 0;
+        // --- 全域掛載 ---
+        window.selectCategory = (id) => { selectedCategory = id; renderApp(); updateSubmitButtonState(); };
+        window.setFilter = (id) => { currentFilter = id; renderApp(); };
+        window.toggleComplete = async (id) => { const m = memos.find(x => x.id === id); if (m) await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId, id), { completed: !m.completed }); };
+        window.togglePin = async (id) => { const m = memos.find(x => x.id === id); if (m) await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId, id), { pinned: !m.pinned }); };
+        window.editMemo = (id) => { const m = memos.find(x => x.id === id); if (m) { editingMemoId = id; memoInput.value = m.text || ''; selectedCategory = m.category; existingImages = m.images ? [...m.images] : (m.imageUrl ? [{url: m.imageUrl, path: m.imagePath}] : []); pendingImageFiles = []; renderImagePreviews(); cancelEditBtn.classList.remove('hidden'); updateSubmitButtonState(); window.scrollTo({ top: 0, behavior: 'smooth' }); memoInput.focus(); } };
+        window.deleteMemo = (id) => { const m = memos.find(x => x.id === id); showConfirm('刪除備忘錄', '確定刪除嗎？', async () => { const imgs = m.images || (m.imagePath ? [{path: m.imagePath}] : []); for (const i of imgs) { if(i.path) await deleteObject(ref(storage, i.path)).catch(e => console.error(e)); } await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId, id)); showToast('已刪除', 'info'); }); };
+        window.openManageCategoriesModal = () => { renderManageList(); manageCategoriesModal.classList.remove('hidden'); setTimeout(() => manageCategoriesModal.classList.remove('opacity-0'), 10); };
+        window.closeManageCategoriesModal = () => { manageCategoriesModal.classList.add('opacity-0'); setTimeout(() => manageCategoriesModal.classList.add('hidden'), 300); };
+        function renderManageList() { manageCategoriesList.innerHTML = categories.length ? `<ul class="space-y-2">` + categories.map(c => `<li class="flex items-center justify-between p-3 rounded-xl border border-slate-100"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full ${c.bgColor} ${c.color} flex items-center justify-center"><i data-lucide="${c.icon}" class="w-4 h-4"></i></div><span class="text-sm font-medium">${c.label}</span></div><div class="flex gap-1"><button onclick="window.editCategory('${c.id}')" class="p-2 text-slate-400"><i data-lucide="pencil" class="w-4 h-4"></i></button><button onclick="window.deleteCategory('${c.id}')" class="p-2 text-slate-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></li>`).join('') + `</ul>` : '<p class="py-8 text-center text-slate-400 text-sm">尚無分類</p>'; lucide.createIcons(); }
+        window.openCategoryModal = (id = null) => { editingCategoryId = id; if (id) { const c = categories.find(x => x.id === id); catModalTitleText.textContent = '編輯分類'; catModalInput.value = c.label; newCatIcon = c.icon; newCatColorIndex = COLOR_OPTIONS.findIndex(o => o.color === c.color); } else { catModalTitleText.textContent = '自訂新分類'; catModalInput.value = ''; newCatIcon = ICON_OPTIONS[0]; newCatColorIndex = 0; } categoryModal.classList.remove('hidden'); setTimeout(() => categoryModal.classList.remove('opacity-0'), 10); renderModalSelectors(); };
+        window.closeCategoryModal = () => { categoryModal.classList.add('opacity-0'); setTimeout(() => categoryModal.classList.add('hidden'), 300); };
+        window.editCategory = (id) => window.openCategoryModal(id);
+        
+        // 🌟 調整：刪除成功後關閉管理視窗
+        window.deleteCategory = (id) => showConfirm('刪除分類？', '資料庫內容不會消失。', async () => { 
+            try {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId + '_categories', id)); 
+                showToast('已刪除分類', 'info'); 
+                window.closeManageCategoriesModal(); // 刪除後關閉管理視窗
+            } catch (e) {
+                showToast('刪除失敗', 'error');
             }
-            if (categoryModal) {
-                categoryModal.classList.remove('hidden'); 
-                setTimeout(() => categoryModal.classList.remove('opacity-0'), 10);
-            }
-            renderModalSelectors();
-            setTimeout(() => { if (catModalInput) catModalInput.focus() }, 50);
-        };
-
-        window.closeCategoryModal = () => { 
-            if (categoryModal) {
-                categoryModal.classList.add('opacity-0'); 
-                setTimeout(() => categoryModal.classList.add('hidden'), 300); 
-            }
-        };
-
-        window.editCategory = (id) => { window.openCategoryModal(id); };
-
-        window.deleteCategory = (id) => {
-            showConfirm('確定刪除分類？', '該分類下的備忘錄不會消失，但會自動歸類到「已刪除分類」。', async () => {
-                try {
-                    await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId + '_categories', id));
-                    showToast('已刪除分類', 'info');
-                } catch (error) {
-                    console.error("刪除分類失敗", error);
-                    showToast('刪除分類失敗', 'error');
-                }
-            });
-        };
+        });
 
         window.setModalColor = (idx) => { newCatColorIndex = idx; renderModalSelectors(); };
         window.setModalIcon = (icon) => { newCatIcon = icon; renderModalSelectors(); };
-        function renderModalSelectors() {
-            if (catColorSelector) {
-                catColorSelector.innerHTML = COLOR_OPTIONS.map((c, i) => `<button type="button" onclick="window.setModalColor(${i})" class="w-8 h-8 rounded-full ${c.display} flex items-center justify-center transition-all ${newCatColorIndex === i ? 'ring-2 ring-offset-2 ring-slate-400 scale-110' : ''}">${newCatColorIndex === i ? '<i data-lucide="check" class="w-4 h-4 text-white"></i>' : ''}</button>`).join('');
-            }
-            if (catIconSelector) {
-                catIconSelector.innerHTML = ICON_OPTIONS.map(i => `<button type="button" onclick="window.setModalIcon('${i}')" class="p-2 rounded-xl transition-all ${newCatIcon === i ? 'bg-blue-50 text-blue-600 ring-1 ring-blue-200' : 'text-slate-400 hover:bg-slate-50'}"><i data-lucide="${i}" class="w-5 h-5"></i></button>`).join('');
-            }
-            lucide.createIcons();
-            if (catModalSubmit && catModalInput) catModalSubmit.disabled = !catModalInput.value.trim();
-        }
-
-        if (catModalInput) {
-            catModalInput.addEventListener('input', () => {
-                if (catModalSubmit) catModalSubmit.disabled = !catModalInput.value.trim();
-            });
-        }
+        function renderModalSelectors() { catColorSelector.innerHTML = COLOR_OPTIONS.map((c, i) => `<button type="button" onclick="window.setModalColor(${i})" class="w-8 h-8 rounded-full ${c.display} flex items-center justify-center transition-all ${newCatColorIndex === i ? 'ring-2 ring-offset-2 ring-slate-400' : ''}">${newCatColorIndex === i ? '<i data-lucide="check" class="text-white w-4 h-4"></i>' : ''}</button>`).join(''); catIconSelector.innerHTML = ICON_OPTIONS.map(i => `<button type="button" onclick="window.setModalIcon('${i}')" class="p-2 rounded-xl transition-all ${newCatIcon === i ? 'bg-blue-50 text-blue-600 ring-1 ring-blue-200' : 'text-slate-400'}"><i data-lucide="${i}" class="w-5 h-5"></i></button>`).join(''); lucide.createIcons(); catModalSubmit.disabled = !catModalInput.value.trim(); }
+        catModalInput.addEventListener('input', () => catModalSubmit.disabled = !catModalInput.value.trim());
         
-        if (catModalForm) {
-            catModalForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const label = catModalInput ? catModalInput.value.trim() : '';
-                const color = COLOR_OPTIONS[newCatColorIndex];
-                const data = { label, icon: newCatIcon, color: color.color, bgColor: color.bgColor, activeBg: color.activeBg, borderColor: color.borderColor };
-                
-                if (catModalSubmit) {
-                    catModalSubmit.disabled = true;
-                    const originalText = catModalSubmitText ? catModalSubmitText.textContent : '';
-                    if (catModalSubmitText) catModalSubmitText.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>';
-                    lucide.createIcons();
-
-                    try {
-                        if (editingCategoryId) {
-                            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId + '_categories', editingCategoryId), data);
-                            showToast('分類已更新', 'success');
-                        } else {
-                            await setDoc(doc(collection(db, 'artifacts', appId, 'public', 'data', currentRoomId + '_categories')), { ...data, createdAt: Date.now() });
-                            showToast('已建立新分類', 'success');
-                        }
-                        window.closeCategoryModal();
-                    } catch (error) {
-                        console.error("儲存分類失敗", error);
-                        showToast('分類儲存失敗', 'error');
-                    } finally {
-                        if (catModalSubmit) catModalSubmit.disabled = false;
-                        if (catModalSubmitText) catModalSubmitText.textContent = originalText;
-                    }
+        catModalForm.addEventListener('submit', async (e) => { 
+            e.preventDefault(); 
+            const color = COLOR_OPTIONS[newCatColorIndex]; 
+            const data = { label: catModalInput.value.trim(), icon: newCatIcon, color: color.color, bgColor: color.bgColor, borderColor: color.borderColor }; 
+            catModalSubmit.disabled = true; 
+            try { 
+                if (editingCategoryId) {
+                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId + '_categories', editingCategoryId), data);
+                    showToast('已更新分類');
+                } else {
+                    await setDoc(doc(collection(db, 'artifacts', appId, 'public', 'data', currentRoomId + '_categories')), { ...data, createdAt: Date.now() }); 
+                    showToast('已新增分類');
                 }
-            });
-        }
+                window.closeCategoryModal(); 
+                window.closeManageCategoriesModal(); 
+            } catch (e) { console.error(e); showToast('儲存失敗', 'error'); } 
+            catModalSubmit.disabled = false; 
+        });
+
+        if (clearCompletedBtn) clearCompletedBtn.addEventListener('click', () => { const done = memos.filter(m => m.completed); if (!done.length) return; showConfirm('清除已完成項目', `確定清除這 ${done.length} 筆嗎？`, async () => { for (const m of done) { const imgs = m.images || (m.imagePath ? [{path: m.imagePath}] : []); for (const i of imgs) { if(i.path) await deleteObject(ref(storage, i.path)).catch(e => console.error(e)); } await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId, m.id)); } showToast('已清理', 'info'); }); });
     </script>
 </body>
-
 </html>
