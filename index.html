@@ -5,6 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>備忘錄工具</title>
+    <meta name="description" content="支援照片附件的私密備忘錄工具，可附加多張圖片、設定截止日期與優先級，私人空間加密保護。">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="備忘錄工具 — 照片＋文字私密記事">
+    <meta property="og:description" content="支援照片附件的私密備忘錄工具，可附加多張圖片、設定截止日期與優先級，私人空間加密保護。">
+    <meta property="og:locale" content="zh_TW">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="備忘錄工具 — 照片＋文字私密記事">
+    <meta name="twitter:description" content="支援照片附件的私密備忘錄工具，可附加多張圖片、設定截止日期與優先級，私人空間加密保護。">
+
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -221,7 +230,8 @@
                     </div>
                     <!-- 確認密碼（建立模式才顯示） -->
                     <div id="auth-confirm-pw-wrap" class="hidden">
-                        <label class="block text-sm font-semibold mb-1.5" style="color:rgba(255,255,255,0.75)">確認密碼</label>
+                        <label class="block text-sm font-semibold mb-1.5"
+                            style="color:rgba(255,255,255,0.75)">確認密碼</label>
                         <div class="relative">
                             <input type="password" id="auth-confirm-password" placeholder="再輸入一次密碼"
                                 class="w-full p-3 pr-10 rounded-xl outline-none transition-all tracking-widest"
@@ -236,8 +246,10 @@
                     </div>
                 </div>
                 <!-- 記住我 -->
-                <label id="remember-me-wrap" class="flex items-center gap-2 cursor-pointer select-none text-sm" style="color:rgba(255,255,255,0.5)">
-                    <input type="checkbox" id="remember-me-checkbox" class="w-4 h-4 rounded accent-violet-400 cursor-pointer">
+                <label id="remember-me-wrap" class="flex items-center gap-2 cursor-pointer select-none text-sm"
+                    style="color:rgba(255,255,255,0.5)">
+                    <input type="checkbox" id="remember-me-checkbox"
+                        class="w-4 h-4 rounded accent-violet-400 cursor-pointer">
                     記住帳號（下次自動填入）
                 </label>
                 <p id="auth-error" class="text-sm hidden text-center py-2 rounded-xl transition-all"
@@ -297,9 +309,11 @@
                     <span class="flex items-center gap-2 text-sm font-bold" style="color:rgba(255,255,255,0.75)">
                         <i data-lucide="pencil-line" class="w-4 h-4" style="color:#a78bfa"></i>
                         新增備忘錄
-                        <span id="editing-badge" class="hidden text-[10px] px-2 py-0.5 rounded-full font-bold" style="background:rgba(167,139,250,0.25);color:#c4b5fd">編輯中</span>
+                        <span id="editing-badge" class="hidden text-[10px] px-2 py-0.5 rounded-full font-bold"
+                            style="background:rgba(167,139,250,0.25);color:#c4b5fd">編輯中</span>
                     </span>
-                    <i data-lucide="chevron-up" id="form-toggle-icon" class="w-4 h-4 transition-transform duration-300" style="color:rgba(255,255,255,0.4)"></i>
+                    <i data-lucide="chevron-up" id="form-toggle-icon" class="w-4 h-4 transition-transform duration-300"
+                        style="color:rgba(255,255,255,0.4)"></i>
                 </button>
                 <!-- 可收展內容 -->
                 <div id="form-collapsible" class="transition-all duration-300 overflow-hidden">
@@ -308,73 +322,79 @@
                             <div>
                                 <label class="block text-xs font-bold mb-2 uppercase tracking-wider"
                                     style="color:rgba(255,255,255,0.4)">歸屬分類</label>
-                                <div class="flex overflow-x-auto gap-2 no-scrollbar w-full pb-1" id="category-selector"></div>
+                                <div class="flex overflow-x-auto gap-2 no-scrollbar w-full pb-1" id="category-selector">
+                                </div>
                             </div>
-                    <div class="relative w-full">
-                        <textarea id="memo-input" placeholder="記下要做的事（支援多行輸入）..." rows="3"
-                            class="w-full text-base p-3 pr-10 rounded-xl outline-none transition-all placeholder:opacity-40"
-                            style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:white;"
-                            autocomplete="off"></textarea>
-                        <button type="button" id="clear-input-btn"
-                            class="absolute right-2 top-3 focus:outline-none hidden"
-                            style="color:rgba(255,255,255,0.3)">
-                            <i data-lucide="x-circle" class="w-5 h-5"></i>
-                        </button>
-                    </div>
-                    <!-- 備註欄位 -->
-                    <div>
-                        <label class="block text-xs font-bold mb-1.5 uppercase tracking-wider" style="color:rgba(255,255,255,0.4)">備註（選填）</label>
-                        <textarea id="memo-note" placeholder="補充說明、細節…" rows="2"
-                            class="w-full text-sm p-3 rounded-xl outline-none transition-all placeholder:opacity-30"
-                            style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);"
-                            autocomplete="off"></textarea>
-                    </div>
-                    <!-- 開始日期 + 截止日期 + 優先級 -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-bold mb-1.5 uppercase tracking-wider"
-                                style="color:rgba(255,255,255,0.4)">開始日期（選填）</label>
-                            <input type="date" id="memo-start-date" class="w-full p-2.5 rounded-xl outline-none text-sm"
-                                style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.8);">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold mb-1.5 uppercase tracking-wider"
-                                style="color:rgba(255,255,255,0.4)">截止日期（選填）</label>
-                            <input type="date" id="memo-due-date" class="w-full p-2.5 rounded-xl outline-none text-sm"
-                                style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.8);">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold mb-1.5 uppercase tracking-wider"
-                            style="color:rgba(255,255,255,0.4)">優先級</label>
-                        <div class="flex gap-2" id="priority-selector">
-                            <button type="button" onclick="window.setPriority('high')" id="pri-high"
-                                class="flex-1 py-2 rounded-xl text-xs font-bold transition-all"
-                                style="background:rgba(244,63,94,0.15);color:#fda4af;border:1px solid rgba(244,63,94,0.2)">⬤
-                                高</button>
-                            <button type="button" onclick="window.setPriority('medium')" id="pri-medium"
-                                class="flex-1 py-2 rounded-xl text-xs font-bold transition-all"
-                                style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.1)">⬤
-                                中</button>
-                            <button type="button" onclick="window.setPriority('low')" id="pri-low"
-                                class="flex-1 py-2 rounded-xl text-xs font-bold transition-all"
-                                style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.1)">⬤
-                                低</button>
-                        </div>
-                    </div>
-                    <div class="rounded-xl p-3"
-                        style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08)">
-                        <div class="flex items-center justify-between">
-                            <button type="button" id="trigger-image-btn"
-                                class="flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg transition-all"
-                                style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.12)">
-                                <i data-lucide="image-plus" class="w-4 h-4"></i>
-                                附加圖片 (<span id="image-count">0</span> / 5)
-                            </button>
-                            <input type="file" id="memo-image-input" accept="image/*" multiple max="5" class="hidden" />
-                        </div>
-                        <div id="image-preview-list" class="hidden flex flex-wrap gap-3 mt-2 justify-center"></div>
-                    </div>
+                            <div class="relative w-full">
+                                <textarea id="memo-input" placeholder="記下要做的事（支援多行輸入）..." rows="3"
+                                    class="w-full text-base p-3 pr-10 rounded-xl outline-none transition-all placeholder:opacity-40"
+                                    style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:white;"
+                                    autocomplete="off"></textarea>
+                                <button type="button" id="clear-input-btn"
+                                    class="absolute right-2 top-3 focus:outline-none hidden"
+                                    style="color:rgba(255,255,255,0.3)">
+                                    <i data-lucide="x-circle" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                            <!-- 備註欄位 -->
+                            <div>
+                                <label class="block text-xs font-bold mb-1.5 uppercase tracking-wider"
+                                    style="color:rgba(255,255,255,0.4)">備註（選填）</label>
+                                <textarea id="memo-note" placeholder="補充說明、細節…" rows="2"
+                                    class="w-full text-sm p-3 rounded-xl outline-none transition-all placeholder:opacity-30"
+                                    style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);"
+                                    autocomplete="off"></textarea>
+                            </div>
+                            <!-- 開始日期 + 截止日期 + 優先級 -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-bold mb-1.5 uppercase tracking-wider"
+                                        style="color:rgba(255,255,255,0.4)">開始日期（選填）</label>
+                                    <input type="date" id="memo-start-date"
+                                        class="w-full p-2.5 rounded-xl outline-none text-sm"
+                                        style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.8);">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold mb-1.5 uppercase tracking-wider"
+                                        style="color:rgba(255,255,255,0.4)">截止日期（選填）</label>
+                                    <input type="date" id="memo-due-date"
+                                        class="w-full p-2.5 rounded-xl outline-none text-sm"
+                                        style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.8);">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold mb-1.5 uppercase tracking-wider"
+                                    style="color:rgba(255,255,255,0.4)">優先級</label>
+                                <div class="flex gap-2" id="priority-selector">
+                                    <button type="button" onclick="window.setPriority('high')" id="pri-high"
+                                        class="flex-1 py-2 rounded-xl text-xs font-bold transition-all"
+                                        style="background:rgba(244,63,94,0.15);color:#fda4af;border:1px solid rgba(244,63,94,0.2)">⬤
+                                        高</button>
+                                    <button type="button" onclick="window.setPriority('medium')" id="pri-medium"
+                                        class="flex-1 py-2 rounded-xl text-xs font-bold transition-all"
+                                        style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.1)">⬤
+                                        中</button>
+                                    <button type="button" onclick="window.setPriority('low')" id="pri-low"
+                                        class="flex-1 py-2 rounded-xl text-xs font-bold transition-all"
+                                        style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.1)">⬤
+                                        低</button>
+                                </div>
+                            </div>
+                            <div class="rounded-xl p-3"
+                                style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08)">
+                                <div class="flex items-center justify-between">
+                                    <button type="button" id="trigger-image-btn"
+                                        class="flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg transition-all"
+                                        style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.12)">
+                                        <i data-lucide="image-plus" class="w-4 h-4"></i>
+                                        附加圖片 (<span id="image-count">0</span> / 5)
+                                    </button>
+                                    <input type="file" id="memo-image-input" accept="image/*" multiple max="5"
+                                        class="hidden" />
+                                </div>
+                                <div id="image-preview-list" class="hidden flex flex-wrap gap-3 mt-2 justify-center">
+                                </div>
+                            </div>
                             <div class="flex items-center justify-end gap-3 w-full">
                                 <button type="button" id="cancel-edit-btn"
                                     class="hidden px-5 py-2.5 rounded-xl font-semibold transition-all text-sm"
@@ -554,33 +574,46 @@
             </div>
             <form id="change-pw-form" class="flex flex-col gap-3">
                 <div>
-                    <label class="block text-xs font-bold mb-1.5 uppercase tracking-wider" style="color:rgba(255,255,255,0.4)">目前密碼</label>
+                    <label class="block text-xs font-bold mb-1.5 uppercase tracking-wider"
+                        style="color:rgba(255,255,255,0.4)">目前密碼</label>
                     <div class="relative">
                         <input type="password" id="cpw-old" placeholder="輸入目前密碼" minlength="4" required
                             class="w-full p-3 pr-10 rounded-xl outline-none text-sm font-mono"
                             style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:white;">
-                        <button type="button" onclick="window.toggleCpwEye('cpw-old','cpw-eye-old')" class="absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none" style="color:rgba(255,255,255,0.35)"><i id="cpw-eye-old" data-lucide="eye" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="window.toggleCpwEye('cpw-old','cpw-eye-old')"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none"
+                            style="color:rgba(255,255,255,0.35)"><i id="cpw-eye-old" data-lucide="eye"
+                                class="w-4 h-4"></i></button>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold mb-1.5 uppercase tracking-wider" style="color:rgba(255,255,255,0.4)">新密碼</label>
+                    <label class="block text-xs font-bold mb-1.5 uppercase tracking-wider"
+                        style="color:rgba(255,255,255,0.4)">新密碼</label>
                     <div class="relative">
                         <input type="password" id="cpw-new" placeholder="至少4碼" minlength="4" required
                             class="w-full p-3 pr-10 rounded-xl outline-none text-sm font-mono"
                             style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:white;">
-                        <button type="button" onclick="window.toggleCpwEye('cpw-new','cpw-eye-new')" class="absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none" style="color:rgba(255,255,255,0.35)"><i id="cpw-eye-new" data-lucide="eye" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="window.toggleCpwEye('cpw-new','cpw-eye-new')"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none"
+                            style="color:rgba(255,255,255,0.35)"><i id="cpw-eye-new" data-lucide="eye"
+                                class="w-4 h-4"></i></button>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold mb-1.5 uppercase tracking-wider" style="color:rgba(255,255,255,0.4)">確認新密碼</label>
+                    <label class="block text-xs font-bold mb-1.5 uppercase tracking-wider"
+                        style="color:rgba(255,255,255,0.4)">確認新密碼</label>
                     <div class="relative">
                         <input type="password" id="cpw-confirm" placeholder="再輸一次新密碼" minlength="4" required
                             class="w-full p-3 pr-10 rounded-xl outline-none text-sm font-mono"
                             style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:white;">
-                        <button type="button" onclick="window.toggleCpwEye('cpw-confirm','cpw-eye-confirm')" class="absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none" style="color:rgba(255,255,255,0.35)"><i id="cpw-eye-confirm" data-lucide="eye" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="window.toggleCpwEye('cpw-confirm','cpw-eye-confirm')"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none"
+                            style="color:rgba(255,255,255,0.35)"><i id="cpw-eye-confirm" data-lucide="eye"
+                                class="w-4 h-4"></i></button>
                     </div>
                 </div>
-                <p id="cpw-error" class="text-sm hidden text-center py-2 rounded-xl" style="background:rgba(244,63,94,0.15);color:#fca5a5"></p>
+                <p id="cpw-error" class="text-sm hidden text-center py-2 rounded-xl"
+                    style="background:rgba(244,63,94,0.15);color:#fca5a5"></p>
                 <button type="submit" id="cpw-submit"
                     class="w-full py-3 rounded-xl font-bold text-white transition-all active:scale-95 mt-1"
                     style="background:linear-gradient(135deg,#a78bfa,#60a5fa);box-shadow:0 4px 16px rgba(167,139,250,0.4)">
@@ -928,7 +961,7 @@
         // --- 進階篩選 ---
         window.setStatusFilter = (v) => {
             currentStatusFilter = v;
-            ['all','todo','done','overdue'].forEach(k => {
+            ['all', 'todo', 'done', 'overdue'].forEach(k => {
                 const btn = document.getElementById('sf-' + k);
                 if (!btn) return;
                 btn.style.background = k === v ? 'rgba(255,255,255,0.15)' : '';
@@ -941,7 +974,7 @@
             currentPriFilter = v;
             const PRI_ACTIVE = { '': 'rgba(255,255,255,0.15)', high: 'rgba(244,63,94,0.25)', medium: 'rgba(245,158,11,0.25)', low: 'rgba(16,185,129,0.25)' };
             const PRI_COLORS = { '': 'white', high: '#fda4af', medium: '#fcd34d', low: '#6ee7b7' };
-            ['','high','medium','low'].forEach(k => {
+            ['', 'high', 'medium', 'low'].forEach(k => {
                 const id = k === '' ? 'pf-all' : 'pf-' + k;
                 const btn = document.getElementById(id);
                 if (!btn) return;
@@ -967,8 +1000,8 @@
                 document.getElementById('cpw-new').value = '';
                 document.getElementById('cpw-confirm').value = '';
                 // reset eye icons to 'eye' (hidden)
-                ['cpw-old','cpw-new','cpw-confirm'].forEach(id => { const el = document.getElementById(id); if(el) el.type = 'password'; });
-                ['cpw-eye-old','cpw-eye-new','cpw-eye-confirm'].forEach(id => { const ico = document.getElementById(id); if(ico) ico.setAttribute('data-lucide','eye'); });
+                ['cpw-old', 'cpw-new', 'cpw-confirm'].forEach(id => { const el = document.getElementById(id); if (el) el.type = 'password'; });
+                ['cpw-eye-old', 'cpw-eye-new', 'cpw-eye-confirm'].forEach(id => { const ico = document.getElementById(id); if (ico) ico.setAttribute('data-lucide', 'eye'); });
                 if (cpwError) cpwError.classList.add('hidden');
                 changePwModal.classList.remove('hidden');
                 setTimeout(() => { changePwModal.classList.remove('opacity-0'); lucide.createIcons(); }, 10);
