@@ -307,23 +307,36 @@
                     class="w-full flex items-center justify-between px-4 md:px-6 py-3.5 transition-all"
                     style="border-bottom:1px solid rgba(255,255,255,0.08)">
                     <span class="flex items-center gap-2 text-sm font-bold" style="color:rgba(255,255,255,0.75)">
-                        <i data-lucide="pencil-line" class="w-4 h-4" style="color:#a78bfa"></i>
+                        <i data-lucide="plus-circle" class="w-4 h-4" style="color:#a78bfa"></i>
                         新增備忘錄
                         <span id="editing-badge" class="hidden text-[10px] px-2 py-0.5 rounded-full font-bold"
-                            style="background:rgba(167,139,250,0.25);color:#c4b5fd">編輯中</span>
+                            style="background:rgba(167,139,250,0.25);color:#c4b5fd">✏️ 編輯中</span>
                     </span>
-                    <i data-lucide="chevron-up" id="form-toggle-icon" class="w-4 h-4 transition-transform duration-300"
-                        style="color:rgba(255,255,255,0.4)"></i>
+                    <span class="flex items-center gap-1.5 text-xs" style="color:rgba(255,255,255,0.3)">
+                        <span id="form-toggle-hint" class="hidden sm:inline">點擊展開／收起</span>
+                        <i data-lucide="chevron-up" id="form-toggle-icon" class="w-4 h-4 transition-transform duration-300"></i>
+                    </span>
                 </button>
                 <!-- 可收展內容 -->
                 <div id="form-collapsible" class="transition-all duration-300 overflow-hidden">
                     <div class="p-4 md:p-6">
                         <form id="memo-form" class="flex flex-col gap-4">
                             <div>
-                                <label class="block text-xs font-bold mb-2 uppercase tracking-wider"
-                                    style="color:rgba(255,255,255,0.4)">歸屬分類</label>
-                                <div class="flex overflow-x-auto gap-2 no-scrollbar w-full pb-1" id="category-selector">
+                                <div class="flex items-center justify-between mb-2">
+                                    <label class="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5"
+                                        style="color:rgba(255,255,255,0.5)">
+                                        <i data-lucide="folder-open" class="w-3.5 h-3.5" style="color:#a78bfa"></i>
+                                        歸屬分類
+                                        <span class="normal-case font-normal tracking-normal" style="color:rgba(255,255,255,0.3)">（點選以切換）</span>
+                                    </label>
                                 </div>
+                                <div class="flex overflow-x-auto gap-2 no-scrollbar w-full pb-1 pt-0.5" id="category-selector"
+                                    style="scroll-snap-type:x mandatory">
+                                </div>
+                                <p class="text-[11px] mt-1.5 flex items-center gap-1" style="color:rgba(255,255,255,0.25)">
+                                    <i data-lucide="info" class="w-3 h-3" style="flex-shrink:0"></i>
+                                    選擇分類後才能送出備忘錄
+                                </p>
                             </div>
                             <div class="relative w-full">
                                 <textarea id="memo-input" placeholder="記下要做的事（支援多行輸入）..." rows="3"
@@ -467,13 +480,18 @@
                             style="color:rgba(255,255,255,0.4)">⬤ 低</button>
                     </div>
                 </div>
-                <!-- 清除 + 緊湊模式 -->
+                <!-- 清除 + 排序 + 緊湊模式 -->
                 <div id="filter-bar-wrap" class="flex items-center justify-end gap-1 px-2 md:px-3 py-1"
                     style="border-bottom:1px solid rgba(255,255,255,0.07);background:rgba(15,12,41,0.6)">
                     <button id="clear-completed-btn"
                         class="hidden text-xs font-medium flex items-center gap-1 px-3 py-1.5 rounded-xl transition-all"
                         style="color:rgba(255,100,100,0.7)">
                         <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>清除已完成
+                    </button>
+                    <button id="sort-priority-btn" title="依優先級排序"
+                        class="flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-xl transition-all"
+                        style="color:rgba(255,255,255,0.35)">
+                        <i data-lucide="arrow-up-down" class="w-3.5 h-3.5"></i>優先級排序
                     </button>
                     <button id="compact-view-btn" title="緊湊模式"
                         class="flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-xl transition-all"
@@ -504,7 +522,8 @@
 
     <!-- 分類管理 Modal -->
     <div id="manage-categories-modal"
-        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 hidden flex-col items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 opacity-0 transition-opacity duration-300"
+        style="display:none;align-items:center;justify-content:center;padding:1rem">
         <div class="bg-white rounded-2xl shadow-xl border border-slate-100 w-full max-w-sm overflow-hidden transform transition-all scale-95 flex flex-col max-h-[80vh]"
             style="color:#1e293b">
             <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
@@ -524,7 +543,8 @@
 
     <!-- 編輯分類 Modal -->
     <div id="category-modal"
-        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex-col items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 opacity-0 transition-opacity duration-300"
+        style="display:none;align-items:center;justify-content:center;padding:1rem">
         <div class="bg-white rounded-2xl shadow-xl border border-slate-100 w-full max-w-sm overflow-hidden transform transition-all scale-95 flex flex-col max-h-[80vh]"
             id="category-modal-card" style="color:#1e293b">
             <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
@@ -559,8 +579,8 @@
 
     <!-- 更改密碼 Modal -->
     <div id="change-pw-modal"
-        class="fixed inset-0 backdrop-blur-md z-[60] hidden flex-col items-center justify-center p-4 opacity-0 transition-opacity duration-300"
-        style="background:rgba(0,0,0,0.7)">
+        class="fixed inset-0 backdrop-blur-md z-[60] opacity-0 transition-opacity duration-300"
+        style="display:none;align-items:center;justify-content:center;padding:1rem;background:rgba(0,0,0,0.7)">
         <div class="glass rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden p-6 flex flex-col gap-5">
             <div class="flex justify-between items-center">
                 <h3 class="text-lg font-bold flex items-center gap-2">
@@ -1003,13 +1023,13 @@
                 ['cpw-old', 'cpw-new', 'cpw-confirm'].forEach(id => { const el = document.getElementById(id); if (el) el.type = 'password'; });
                 ['cpw-eye-old', 'cpw-eye-new', 'cpw-eye-confirm'].forEach(id => { const ico = document.getElementById(id); if (ico) ico.setAttribute('data-lucide', 'eye'); });
                 if (cpwError) cpwError.classList.add('hidden');
-                changePwModal.classList.remove('hidden');
+                changePwModal.style.display = 'flex';
                 setTimeout(() => { changePwModal.classList.remove('opacity-0'); lucide.createIcons(); }, 10);
             });
         }
         window.closeChangePwModal = () => {
             changePwModal.classList.add('opacity-0');
-            setTimeout(() => changePwModal.classList.add('hidden'), 300);
+            setTimeout(() => { changePwModal.style.display = 'none'; }, 300);
         };
         if (changePwForm) changePwForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -1052,7 +1072,7 @@
         };
 
         // --- 功能模組 ---
-        const MAX_IMAGE_SIZE_MB = 5;
+        const MAX_IMAGE_SIZE_MB = 10;
         const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024;
         if (triggerImageBtn) triggerImageBtn.addEventListener('click', () => { if (existingImages.length + pendingImageFiles.length >= 5) showToast('最多 5 張圖片！', 'error'); else memoImageInput.click(); });
         if (memoImageInput) memoImageInput.addEventListener('change', (e) => {
@@ -1088,6 +1108,17 @@
             compactViewBtn.style.color = compactView ? '#c4b5fd' : 'rgba(255,255,255,0.35)';
             compactViewBtn.style.border = compactView ? '1px solid rgba(167,139,250,0.3)' : '';
             compactViewBtn.querySelector('i')?.setAttribute('data-lucide', compactView ? 'layout-dashboard' : 'layout-list');
+            lucide.createIcons();
+            renderMemos();
+        });
+        // 優先級排序按鈕
+        let sortByPriority = false;
+        const sortPriorityBtn = document.getElementById('sort-priority-btn');
+        if (sortPriorityBtn) sortPriorityBtn.addEventListener('click', () => {
+            sortByPriority = !sortByPriority;
+            sortPriorityBtn.style.background = sortByPriority ? 'rgba(244,63,94,0.2)' : '';
+            sortPriorityBtn.style.color = sortByPriority ? '#fda4af' : 'rgba(255,255,255,0.35)';
+            sortPriorityBtn.style.border = sortByPriority ? '1px solid rgba(244,63,94,0.3)' : '';
             lucide.createIcons();
             renderMemos();
         });
@@ -1214,7 +1245,19 @@
                     if (!(m.text || '').toLowerCase().includes(q) && !(m.note || '').toLowerCase().includes(q)) return false;
                 }
                 return true;
-            }).sort((a, b) => { if (a.completed !== b.completed) return a.completed ? 1 : -1; if (a.pinned !== b.pinned) return a.pinned ? -1 : 1; const oa = a.order || (a.createdAt * -1); const ob = b.order || (b.createdAt * -1); return oa - ob; });
+            }).sort((a, b) => {
+                if (a.completed !== b.completed) return a.completed ? 1 : -1;
+                if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+                if (sortByPriority) {
+                    const PRI_ORDER = { high: 0, medium: 1, low: 2 };
+                    const pa = PRI_ORDER[a.priority] ?? 3;
+                    const pb = PRI_ORDER[b.priority] ?? 3;
+                    if (pa !== pb) return pa - pb;
+                }
+                const oa = a.order || (a.createdAt * -1);
+                const ob = b.order || (b.createdAt * -1);
+                return oa - ob;
+            });
             clearCompletedBtn.classList.toggle('hidden', !memos.some(m => m.completed));
             if (!filtered.length) { memoListContainer.innerHTML = '<div class="py-12 text-center text-sm" style="color:rgba(255,255,255,0.3)">尚無內容</div>'; return; }
             const PRI_DOT = { high: '#f43f5e', medium: '#f59e0b', low: '#10b981' };
@@ -1294,11 +1337,11 @@
             }
         };
         window.deleteMemo = (id) => { const m = memos.find(x => x.id === id); showConfirm('刪除備忘錄', '確定刪除嗎？', async () => { const imgs = m.images || (m.imagePath ? [{ path: m.imagePath }] : []); for (const i of imgs) { if (i.path) await deleteObject(ref(storage, i.path)).catch(e => console.error(e)); } await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId, id)); showToast('已刪除', 'info'); }); };
-        window.openManageCategoriesModal = () => { renderManageList(); manageCategoriesModal.classList.remove('hidden'); setTimeout(() => manageCategoriesModal.classList.remove('opacity-0'), 10); };
-        window.closeManageCategoriesModal = () => { manageCategoriesModal.classList.add('opacity-0'); setTimeout(() => manageCategoriesModal.classList.add('hidden'), 300); };
+        window.openManageCategoriesModal = () => { renderManageList(); manageCategoriesModal.style.display = 'flex'; setTimeout(() => manageCategoriesModal.classList.remove('opacity-0'), 10); };
+        window.closeManageCategoriesModal = () => { manageCategoriesModal.classList.add('opacity-0'); setTimeout(() => { manageCategoriesModal.style.display = 'none'; }, 300); };
         function renderManageList() { manageCategoriesList.innerHTML = categories.length ? `<ul class="space-y-2">` + categories.map(c => `<li class="flex items-center justify-between p-3 rounded-xl border border-slate-100"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full ${c.bgColor} ${c.color} flex items-center justify-center"><i data-lucide="${c.icon}" class="w-4 h-4"></i></div><span class="text-sm font-medium">${c.label}</span></div><div class="flex gap-1"><button onclick="window.editCategory('${c.id}')" class="p-2 text-slate-400"><i data-lucide="pencil" class="w-4 h-4"></i></button><button onclick="window.deleteCategory('${c.id}')" class="p-2 text-slate-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></li>`).join('') + `</ul>` : '<p class="py-8 text-center text-slate-400 text-sm">尚無分類</p>'; lucide.createIcons(); }
-        window.openCategoryModal = (id = null) => { editingCategoryId = id; if (id) { const c = categories.find(x => x.id === id); catModalTitleText.textContent = '編輯分類'; catModalInput.value = c.label; newCatIcon = c.icon; newCatColorIndex = COLOR_OPTIONS.findIndex(o => o.color === c.color); } else { catModalTitleText.textContent = '自訂新分類'; catModalInput.value = ''; newCatIcon = ICON_OPTIONS[0]; newCatColorIndex = 0; } categoryModal.classList.remove('hidden'); setTimeout(() => categoryModal.classList.remove('opacity-0'), 10); renderModalSelectors(); };
-        window.closeCategoryModal = () => { categoryModal.classList.add('opacity-0'); setTimeout(() => categoryModal.classList.add('hidden'), 300); };
+        window.openCategoryModal = (id = null) => { editingCategoryId = id; if (id) { const c = categories.find(x => x.id === id); catModalTitleText.textContent = '編輯分類'; catModalInput.value = c.label; newCatIcon = c.icon; newCatColorIndex = COLOR_OPTIONS.findIndex(o => o.color === c.color); } else { catModalTitleText.textContent = '自訂新分類'; catModalInput.value = ''; newCatIcon = ICON_OPTIONS[0]; newCatColorIndex = 0; } categoryModal.style.display = 'flex'; setTimeout(() => categoryModal.classList.remove('opacity-0'), 10); renderModalSelectors(); };
+        window.closeCategoryModal = () => { categoryModal.classList.add('opacity-0'); setTimeout(() => { categoryModal.style.display = 'none'; }, 300); };
         window.editCategory = (id) => window.openCategoryModal(id);
 
         // 🌟 調整：刪除成功後關閉管理視窗
