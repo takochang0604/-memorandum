@@ -139,16 +139,28 @@
         class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] flex flex-col gap-3 pointer-events-none"></div>
 
     <!-- 全域排序選單（fixed，注射到 body，完全脱離任何 overflow 容器） -->
-    <div id="sort-dropdown-menu"
-        class="hidden fixed z-[75] rounded-xl overflow-hidden shadow-2xl"
+    <div id="sort-dropdown-menu" class="hidden fixed z-[75] rounded-xl overflow-hidden shadow-2xl"
         style="background:rgba(20,18,50,0.97);border:1px solid rgba(255,255,255,0.15);min-width:164px">
-        <div class="px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest" style="color:rgba(255,255,255,0.3);border-bottom:1px solid rgba(255,255,255,0.07)">排序方式</div>
-        <button onclick="window.setSortMode('default')" id="sm-default" class="sort-opt w-full text-left px-3 py-2.5 text-xs font-semibold flex items-center gap-2" style="color:rgba(255,255,255,0.85)"><i data-lucide="grip-vertical" class="w-3.5 h-3.5"></i>自訂順序</button>
-        <button onclick="window.setSortMode('priority')" id="sm-priority" class="sort-opt w-full text-left px-3 py-2.5 text-xs font-semibold flex items-center gap-2" style="color:rgba(255,255,255,0.55)"><i data-lucide="flame" class="w-3.5 h-3.5"></i>優先級（高→低）</button>
-        <button onclick="window.setSortMode('newest')" id="sm-newest" class="sort-opt w-full text-left px-3 py-2.5 text-xs font-semibold flex items-center gap-2" style="color:rgba(255,255,255,0.55)"><i data-lucide="clock" class="w-3.5 h-3.5"></i>建立時間（新→舊）</button>
-        <button onclick="window.setSortMode('oldest')" id="sm-oldest" class="sort-opt w-full text-left px-3 py-2.5 text-xs font-semibold flex items-center gap-2" style="color:rgba(255,255,255,0.55)"><i data-lucide="history" class="w-3.5 h-3.5"></i>建立時間（舊→新）</button>
-        <button onclick="window.setSortMode('due')" id="sm-due" class="sort-opt w-full text-left px-3 py-2.5 text-xs font-semibold flex items-center gap-2" style="color:rgba(255,255,255,0.55)"><i data-lucide="calendar" class="w-3.5 h-3.5"></i>截止日期（近→遠）</button>
-        <button onclick="window.setSortMode('edited')" id="sm-edited" class="sort-opt w-full text-left px-3 py-2.5 text-xs font-semibold flex items-center gap-2" style="color:rgba(255,255,255,0.55)"><i data-lucide="pencil" class="w-3.5 h-3.5"></i>編輯時間（新→舊）</button>
+        <div class="px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest"
+            style="color:rgba(255,255,255,0.3);border-bottom:1px solid rgba(255,255,255,0.07)">排序方式</div>
+        <button onclick="window.setSortMode('default')" id="sm-default"
+            class="sort-opt w-full text-left px-3 py-2.5 text-xs font-semibold flex items-center gap-2"
+            style="color:rgba(255,255,255,0.85)"><i data-lucide="grip-vertical" class="w-3.5 h-3.5"></i>自訂順序</button>
+        <button onclick="window.setSortMode('priority')" id="sm-priority"
+            class="sort-opt w-full text-left px-3 py-2.5 text-xs font-semibold flex items-center gap-2"
+            style="color:rgba(255,255,255,0.55)"><i data-lucide="flame" class="w-3.5 h-3.5"></i>優先級（高→低）</button>
+        <button onclick="window.setSortMode('newest')" id="sm-newest"
+            class="sort-opt w-full text-left px-3 py-2.5 text-xs font-semibold flex items-center gap-2"
+            style="color:rgba(255,255,255,0.55)"><i data-lucide="clock" class="w-3.5 h-3.5"></i>建立時間（新→舊）</button>
+        <button onclick="window.setSortMode('oldest')" id="sm-oldest"
+            class="sort-opt w-full text-left px-3 py-2.5 text-xs font-semibold flex items-center gap-2"
+            style="color:rgba(255,255,255,0.55)"><i data-lucide="history" class="w-3.5 h-3.5"></i>建立時間（舊→新）</button>
+        <button onclick="window.setSortMode('due')" id="sm-due"
+            class="sort-opt w-full text-left px-3 py-2.5 text-xs font-semibold flex items-center gap-2"
+            style="color:rgba(255,255,255,0.55)"><i data-lucide="calendar" class="w-3.5 h-3.5"></i>截止日期（近→遠）</button>
+        <button onclick="window.setSortMode('edited')" id="sm-edited"
+            class="sort-opt w-full text-left px-3 py-2.5 text-xs font-semibold flex items-center gap-2"
+            style="color:rgba(255,255,255,0.55)"><i data-lucide="pencil" class="w-3.5 h-3.5"></i>編輯時間（新→舊）</button>
     </div>
 
     <!-- 全域客製化確認彈窗 -->
@@ -327,7 +339,8 @@
                     </span>
                     <span class="flex items-center gap-1.5 text-xs" style="color:rgba(255,255,255,0.3)">
                         <span id="form-toggle-hint" class="hidden sm:inline">點擊展開／收起</span>
-                        <i data-lucide="chevron-up" id="form-toggle-icon" class="w-4 h-4 transition-transform duration-300"></i>
+                        <i data-lucide="chevron-up" id="form-toggle-icon"
+                            class="w-4 h-4 transition-transform duration-300"></i>
                     </span>
                 </button>
                 <!-- 可收展內容 -->
@@ -340,13 +353,15 @@
                                         style="color:rgba(255,255,255,0.5)">
                                         <i data-lucide="folder-open" class="w-3.5 h-3.5" style="color:#a78bfa"></i>
                                         歸屬分類
-                                        <span class="normal-case font-normal tracking-normal" style="color:rgba(255,255,255,0.3)">（點選以切換）</span>
+                                        <span class="normal-case font-normal tracking-normal"
+                                            style="color:rgba(255,255,255,0.3)">（點選以切換）</span>
                                     </label>
                                 </div>
-                                <div class="flex overflow-x-auto gap-2 no-scrollbar w-full pb-1 pt-0.5" id="category-selector"
-                                    style="scroll-snap-type:x mandatory">
+                                <div class="flex overflow-x-auto gap-2 no-scrollbar w-full pb-1 pt-0.5"
+                                    id="category-selector" style="scroll-snap-type:x mandatory">
                                 </div>
-                                <p class="text-[11px] mt-1.5 flex items-center gap-1" style="color:rgba(255,255,255,0.25)">
+                                <p class="text-[11px] mt-1.5 flex items-center gap-1"
+                                    style="color:rgba(255,255,255,0.25)">
                                     <i data-lucide="info" class="w-3 h-3" style="flex-shrink:0"></i>
                                     選擇分類後才能送出備忘錄
                                 </p>
@@ -595,8 +610,7 @@
     </div>
 
     <!-- 更改密碼 Modal -->
-    <div id="change-pw-modal"
-        class="fixed inset-0 backdrop-blur-md z-[60] opacity-0 transition-opacity duration-300"
+    <div id="change-pw-modal" class="fixed inset-0 backdrop-blur-md z-[60] opacity-0 transition-opacity duration-300"
         style="display:none;align-items:center;justify-content:center;padding:1rem;background:rgba(0,0,0,0.7)">
         <div class="glass rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden p-6 flex flex-col gap-5">
             <div class="flex justify-between items-center">
@@ -663,8 +677,9 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js';
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';
-        import { getFirestore, collection, onSnapshot, doc, setDoc, getDoc, updateDoc, deleteDoc, increment } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
+        import { getFirestore, collection, onSnapshot, doc, getDoc, setDoc, updateDoc, deleteDoc, increment } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
         import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js';
+        import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-functions.js';
 
         // --- Firebase Config ---
         let firebaseConfig = {
@@ -682,6 +697,11 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         const storage = getStorage(app);
+        // Cloud Functions（密碼驗證完全在後端執行）
+        const functions = getFunctions(app, 'asia-east1');
+        const fnVerifyLogin   = httpsCallable(functions, 'verifyLogin');
+        const fnCreateAccount = httpsCallable(functions, 'createAccount');
+        const fnChangePassword = httpsCallable(functions, 'changePassword');
 
         // --- 全域狀態宣告 ---
         let memos = [];
@@ -719,14 +739,14 @@
         // 分類顏色對照表：color id → 實際顏色展示用（深色模式）
         const CAT_COLORS = {
             purple: { accent: '#c084fc', bg: 'rgba(192,132,252,0.18)', border: 'rgba(192,132,252,0.45)', glow: 'rgba(192,132,252,0.25)' },
-            rose:   { accent: '#fb7185', bg: 'rgba(251,113,133,0.18)', border: 'rgba(251,113,133,0.45)', glow: 'rgba(251,113,133,0.25)' },
-            amber:  { accent: '#fbbf24', bg: 'rgba(251,191,36,0.18)',  border: 'rgba(251,191,36,0.45)',  glow: 'rgba(251,191,36,0.25)' },
+            rose: { accent: '#fb7185', bg: 'rgba(251,113,133,0.18)', border: 'rgba(251,113,133,0.45)', glow: 'rgba(251,113,133,0.25)' },
+            amber: { accent: '#fbbf24', bg: 'rgba(251,191,36,0.18)', border: 'rgba(251,191,36,0.45)', glow: 'rgba(251,191,36,0.25)' },
             indigo: { accent: '#818cf8', bg: 'rgba(129,140,248,0.18)', border: 'rgba(129,140,248,0.45)', glow: 'rgba(129,140,248,0.25)' },
-            teal:   { accent: '#2dd4bf', bg: 'rgba(45,212,191,0.18)',  border: 'rgba(45,212,191,0.45)',  glow: 'rgba(45,212,191,0.25)' },
-            blue:   { accent: '#60a5fa', bg: 'rgba(96,165,250,0.18)',  border: 'rgba(96,165,250,0.45)',  glow: 'rgba(96,165,250,0.25)' },
-            emerald:{ accent: '#34d399', bg: 'rgba(52,211,153,0.18)',  border: 'rgba(52,211,153,0.45)',  glow: 'rgba(52,211,153,0.25)' },
+            teal: { accent: '#2dd4bf', bg: 'rgba(45,212,191,0.18)', border: 'rgba(45,212,191,0.45)', glow: 'rgba(45,212,191,0.25)' },
+            blue: { accent: '#60a5fa', bg: 'rgba(96,165,250,0.18)', border: 'rgba(96,165,250,0.45)', glow: 'rgba(96,165,250,0.25)' },
+            emerald: { accent: '#34d399', bg: 'rgba(52,211,153,0.18)', border: 'rgba(52,211,153,0.45)', glow: 'rgba(52,211,153,0.25)' },
             // 預設 fallback
-            default:{ accent: '#c4b5fd', bg: 'rgba(167,139,250,0.18)', border: 'rgba(167,139,250,0.4)',  glow: 'rgba(167,139,250,0.2)' }
+            default: { accent: '#c4b5fd', bg: 'rgba(167,139,250,0.18)', border: 'rgba(167,139,250,0.4)', glow: 'rgba(167,139,250,0.2)' }
         };
         function getCatColor(cat) {
             if (!cat) return CAT_COLORS.default;
@@ -817,6 +837,7 @@
         };
         if (lightboxModal) lightboxModal.addEventListener('click', (e) => { if (e.target === lightboxModal) window.closeLightbox(); });
 
+<<<<<<< HEAD
         // 使用 PBKDF2 + app-level salt 提升密碼安全性，回傳帶 v2: 前綴的雜湊
         async function hashCredentials(accountId, password) {
             const encoder = new TextEncoder();
@@ -838,7 +859,52 @@
             const encoder = new TextEncoder();
             const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(accountId.trim() + ':' + password));
             return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('').substring(0, 24);
+=======
+        // ★ 密碼 hash 已移至 Cloud Functions 後端執行，前端不再做 hash 比對 ★
+        // deriveEncryptionKey 仍在前端執行（加密 key 只存在記憶體，後端不持有）
+
+        // ================== AES-256-GCM Client-side Encryption ==================
+        // Derive AES encryption key from password (separate context from auth key)
+        async function deriveEncryptionKey(accountId, password) {
+            const encoder = new TextEncoder();
+            const ENC_SALT = 'twai-memo-enc-v1-2025';
+            const baseKey = await crypto.subtle.importKey(
+                'raw', encoder.encode(password), 'PBKDF2', false, ['deriveKey']
+            );
+            return crypto.subtle.deriveKey({
+                name: 'PBKDF2',
+                salt: encoder.encode(ENC_SALT + accountId.toLowerCase().trim()),
+                iterations: 100000, hash: 'SHA-256'
+            }, baseKey, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+>>>>>>> 8e9ea2c (feat: 密碼驗證移至 Firebase Cloud Functions 後端)
         }
+        async function encryptField(plaintext, key) {
+            if (!plaintext || !key) return plaintext || '';
+            const iv = crypto.getRandomValues(new Uint8Array(12));
+            const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(plaintext));
+            const buf = new Uint8Array(12 + ct.byteLength); buf.set(iv, 0); buf.set(new Uint8Array(ct), 12);
+            return 'enc:' + btoa(String.fromCharCode(...buf));
+        }
+        async function decryptField(ciphertext, key) {
+            if (!ciphertext || !key || !String(ciphertext).startsWith('enc:')) return ciphertext;
+            try {
+                const buf = Uint8Array.from(atob(ciphertext.slice(4)), c => c.charCodeAt(0));
+                const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: buf.slice(0, 12) }, key, buf.slice(12));
+                return new TextDecoder().decode(plain);
+            } catch (e) { return ciphertext; }
+        }
+        async function encryptMemoFields(data, key) {
+            if (!key) return data;
+            const encImages = await encryptField(JSON.stringify(data.images || []), key);
+            return { ...data, text: await encryptField(data.text || '', key), note: await encryptField(data.note || '', key), _encImages: encImages, images: [] };
+        }
+        async function decryptMemoFields(data, key) {
+            if (!key) return data;
+            let images = data.images || [];
+            if (data._encImages) { try { images = JSON.parse(await decryptField(data._encImages, key)); } catch (e) { } }
+            return { ...data, text: await decryptField(data.text || '', key), note: await decryptField(data.note || '', key), images };
+        }
+        // ================== End Encryption ==================
 
         // ================== AES-256-GCM Client-side Encryption ==================
         // Derive AES encryption key from password (separate context from auth key)
@@ -886,7 +952,7 @@
         function linkify(text) {
             if (!text) return '';
             // 先做 HTML escape 防止 XSS
-            const escaped = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
             // 把 URL（http/https/www 開頭）轉成 <a> 標籤
             return escaped.replace(/(https?:\/\/[^\s<>"]+|www\.[^\s<>"]+)/g, url => {
                 const href = url.startsWith('http') ? url : 'https://' + url;
@@ -957,14 +1023,15 @@
         }
 
         // --- Tab \u5207\u63db ---
+        // --- Tab 切換 ---
         if (document.getElementById('tab-login')) document.getElementById('tab-login').addEventListener('click', () => {
             isCreateMode = false;
             document.getElementById('tab-login').style.background = 'rgba(255,255,255,0.15)';
             document.getElementById('tab-login').style.color = 'white';
             document.getElementById('tab-create').style.background = '';
             document.getElementById('tab-create').style.color = 'rgba(255,255,255,0.5)';
-            if (authAccountId) authAccountId.placeholder = '\u8acb\u8f38\u5165\u60a8\u7684\u5e33\u865f\u4ee3\u78bc';
-            if (authSubmitBtn) authSubmitBtn.innerHTML = '<i data-lucide="log-in" class="w-5 h-5"></i><span>\u767b\u5165\u7a7a\u9593</span>';
+            if (authAccountId) authAccountId.placeholder = '請輸入您的帳號代碼';
+            if (authSubmitBtn) authSubmitBtn.innerHTML = '<i data-lucide="log-in" class="w-5 h-5"></i><span>登入空間</span>';
             if (confirmPwWrap) confirmPwWrap.classList.add('hidden');
             if (authConfirmPassword) { authConfirmPassword.value = ''; authConfirmPassword.removeAttribute('required'); }
             lucide.createIcons(); if (authError) authError.classList.add('hidden');
@@ -975,8 +1042,8 @@
             document.getElementById('tab-create').style.color = 'white';
             document.getElementById('tab-login').style.background = '';
             document.getElementById('tab-login').style.color = 'rgba(255,255,255,0.5)';
-            if (authAccountId) authAccountId.placeholder = '\u8acb\u8f38\u5165\u81ea\u8a02\u5e33\u865f (\u6700\u5c114\u78bc)';
-            if (authSubmitBtn) authSubmitBtn.innerHTML = '<i data-lucide="user-plus" class="w-5 h-5"></i><span>\u5efa\u7acb\u4e26\u9032\u5165</span>';
+            if (authAccountId) authAccountId.placeholder = '請輸入自訂帳號 (最少4碼)';
+            if (authSubmitBtn) authSubmitBtn.innerHTML = '<i data-lucide="user-plus" class="w-5 h-5"></i><span>建立並進入</span>';
             if (confirmPwWrap) confirmPwWrap.classList.remove('hidden');
             if (authConfirmPassword) authConfirmPassword.setAttribute('required', '');
             lucide.createIcons(); if (authError) authError.classList.add('hidden');
@@ -984,9 +1051,10 @@
         if (togglePasswordBtn) togglePasswordBtn.addEventListener('click', () => { const isV = authPassword.type === 'text'; authPassword.type = isV ? 'password' : 'text'; togglePasswordBtn.innerHTML = `<i data-lucide="${isV ? 'eye' : 'eye-off'}" class="w-5 h-5"></i>`; lucide.createIcons(); });
 
         if (authForm) authForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); if (!isAuthReady) { showToast('\u8cc7\u6599\u5eab\u9023\u7dda\u4e2d...', 'info'); return; }
+            e.preventDefault(); if (!isAuthReady) { showToast('資料庫連線中...', 'info'); return; }
             if (authError) authError.classList.add('hidden');
 
+<<<<<<< HEAD
             // 登入節流檢查
             if (Date.now() < loginLockedUntil) {
                 const secs = Math.ceil((loginLockedUntil - Date.now()) / 1000);
@@ -1001,13 +1069,18 @@
             // \u5efa\u7acb\u6a21\u5f0f\uff1a\u78ba\u8a8d\u5bc6\u78bc\u9a57\u8b49
             const aid = authAccountId.value.trim(); const pw = authPassword.value;
             if (aid.length < 4 || pw.length < 4) { if (authError) { authError.textContent = '\u5e33\u865f\u548c\u5bc6\u78bc\u9577\u5ea6\u81f3\u5c114\u78bc\uff01'; authError.classList.remove('hidden'); } return; }
+=======
+            const aid = authAccountId.value.trim(); const pw = authPassword.value;
+            if (aid.length < 4 || pw.length < 4) { if (authError) { authError.textContent = '帳號和密碼長度至少4碼！'; authError.classList.remove('hidden'); } return; }
+>>>>>>> 8e9ea2c (feat: 密碼驗證移至 Firebase Cloud Functions 後端)
             if (isCreateMode) {
                 const cpw = authConfirmPassword ? authConfirmPassword.value : '';
-                if (pw !== cpw) { authError.textContent = '\u5169\u6b21\u8f38\u5165\u7684\u5bc6\u78bc\u4e0d\u4e00\u81f4\uff01'; authError.classList.remove('hidden'); return; }
+                if (pw !== cpw) { authError.textContent = '兩次輸入的密碼不一致！'; authError.classList.remove('hidden'); return; }
             }
 
-            authSubmitBtn.disabled = true; authSubmitBtn.innerHTML = '<i data-lucide="loader-2" class="animate-spin"></i><span>\u8655\u7406\u4e2d...</span>'; lucide.createIcons();
+            authSubmitBtn.disabled = true; authSubmitBtn.innerHTML = '<i data-lucide="loader-2" class="animate-spin"></i><span>處理中...</span>'; lucide.createIcons();
             try {
+<<<<<<< HEAD
                 const hCode = await hashCredentials(aid, pw); const aidHashBuf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('twai-room-' + aid.toLowerCase().trim())); const rId = 'memos_v2_' + Array.from(new Uint8Array(aidHashBuf)).map(b => b.toString(16).padStart(2,'0')).join('').substring(0,24); const pRef = doc(db, 'artifacts', appId, 'public', 'data', rId, 'room_profile');
                 if (isCreateMode) {
                     const rRef = doc(db, 'artifacts', appId, 'public', 'data', 'account_registries', aid);
@@ -1063,10 +1136,29 @@
                                 currentRoomId = actualRoomId; currentAccountId = aid; currentEncKey = await deriveEncryptionKey(aid, pw); showToast('\u767b\u5165\u6210\u529f');
                             }
                         }
+=======
+                if (isCreateMode) {
+                    // ★ 建立帳號：呼叫後端 Cloud Function（密碼 hash 在伺服器計算）
+                    const result = await fnCreateAccount({ accountId: aid, password: pw });
+                    if (result.data.success) {
+                        currentRoomId = result.data.roomId;
+                        currentAccountId = aid;
+                        currentEncKey = await deriveEncryptionKey(aid, pw);
+                        showToast('建立成功！');
+                    }
+                } else {
+                    // ★ 登入：呼叫後端 Cloud Function（密碼 hash 在伺服器比對，不傳回 pwHash）
+                    const result = await fnVerifyLogin({ accountId: aid, password: pw });
+                    if (result.data.success) {
+                        currentRoomId = result.data.roomId;
+                        currentAccountId = aid;
+                        currentEncKey = await deriveEncryptionKey(aid, pw);
+                        showToast('登入成功');
+>>>>>>> 8e9ea2c (feat: 密碼驗證移至 Firebase Cloud Functions 後端)
                     }
                 }
                 if (currentRoomId) {
-                    // \u8a18\u4f4f\u5e33\u865f\u8655\u7406
+                    // 記住帳號處理
                     const rememberChk = document.getElementById('remember-me-checkbox');
                     if (rememberChk && rememberChk.checked) {
                         localStorage.setItem('twai_memo_saved_account', aid);
@@ -1076,7 +1168,7 @@
                     roomCodeDisplay.textContent = currentAccountId; authContainer.classList.add('hidden'); appContainer.classList.remove('hidden');
                     // 讀取該帳號儲存的排序方式，沒有則用預設「優先級」
                     const savedSort = localStorage.getItem(SORT_STORAGE_KEY(currentAccountId));
-                    const validModes = ['default','priority','newest','oldest','due','edited'];
+                    const validModes = ['default', 'priority', 'newest', 'oldest', 'due', 'edited'];
                     if (savedSort && validModes.includes(savedSort)) {
                         currentSortMode = savedSort;
                     } else {
@@ -1086,8 +1178,13 @@
                     unsubscribeCategories = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', currentRoomId + '_categories'), (snap) => { categories = []; snap.forEach(d => categories.push({ id: d.id, ...d.data() })); categories.sort((a, b) => a.createdAt - b.createdAt); if (categories.length > 0 && !selectedCategory) selectedCategory = categories[0].id; renderApp(); });
                     unsubscribeSnapshot = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', currentRoomId), async (snap) => { const raw = []; snap.forEach(d => { if (d.id !== 'room_profile') raw.push({ id: d.id, ...d.data() }); }); memos = await Promise.all(raw.map(m => decryptMemoFields(m, currentEncKey))); isLoading = false; renderApp(); setTimeout(() => cleanupExpiredImages(), 2000); });
                 }
-            } catch (err) { console.error(err); showToast('\u767c\u751f\u932f\u8aa4', 'error'); }
-            authSubmitBtn.disabled = false; authSubmitBtn.innerHTML = isCreateMode ? '<i data-lucide="user-plus"></i><span>\u5efa\u7acb\u4e26\u9032\u5165</span>' : '<i data-lucide="log-in"></i><span>\u767b\u5165\u7a7a\u9593</span>'; lucide.createIcons();
+            } catch (err) {
+                // Cloud Functions 回傳的錯誤訊息直接顯示
+                const msg = err?.message || err?.code || '發生錯誤，請稍後再試';
+                if (authError) { authError.textContent = msg; authError.classList.remove('hidden'); }
+                console.error(err);
+            }
+            authSubmitBtn.disabled = false; authSubmitBtn.innerHTML = isCreateMode ? '<i data-lucide="user-plus"></i><span>建立並進入</span>' : '<i data-lucide="log-in"></i><span>登入空間</span>'; lucide.createIcons();
         });
 
 
@@ -1171,11 +1268,17 @@
             const oldPw = document.getElementById('cpw-old').value;
             const newPw = document.getElementById('cpw-new').value;
             const confirmPw = document.getElementById('cpw-confirm').value;
+<<<<<<< HEAD
             if (newPw !== confirmPw) { cpwError.textContent = '\u65b0\u5bc6\u78bc\u4e0d\u4e00\u81f4\uff01'; cpwError.classList.remove('hidden'); return; }
             if (newPw.length < 4) { cpwError.textContent = '\u5bc6\u78bc\u81f3\u55504\u78bc'; cpwError.classList.remove('hidden'); return; }
+=======
+            if (newPw !== confirmPw) { cpwError.textContent = '新密碼不一致！'; cpwError.classList.remove('hidden'); return; }
+            if (newPw.length < 4) { cpwError.textContent = '密碼至少 4 碼'; cpwError.classList.remove('hidden'); return; }
+>>>>>>> 8e9ea2c (feat: 密碼驗證移至 Firebase Cloud Functions 後端)
             const submitBtn = document.getElementById('cpw-submit');
             submitBtn.disabled = true; submitBtn.textContent = '\u66f4\u6539\u4e2d...';
             try {
+<<<<<<< HEAD
                 const oldHash = await hashCredentials(currentAccountId, oldPw);
                 const pRef = doc(db, 'artifacts', appId, 'public', 'data', currentRoomId, 'room_profile');
                 const pSnap = await getDoc(pRef);
@@ -1192,12 +1295,25 @@
                     // Re-encrypt all memos with new key before reloading
                     const newEncKey = await deriveEncryptionKey(currentAccountId, newPw);
                     showToast('\u5bc6\u78bc\u66f4\u65b0\u4e2d\uff0c\u91cd\u65b0\u52a0\u5bc6\u8cc7\u6599...', 'info');
+=======
+                // ★ 改密碼：舊密碼驗證在後端執行，前端只做 re-encrypt
+                const result = await fnChangePassword({
+                    accountId: currentAccountId,
+                    oldPassword: oldPw,
+                    newPassword: newPw,
+                    roomId: currentRoomId
+                });
+                if (result.data.success) {
+                    const newEncKey = await deriveEncryptionKey(currentAccountId, newPw);
+                    showToast('密碼更新中，重新加密資料...', 'info');
+>>>>>>> 8e9ea2c (feat: 密碼驗證移至 Firebase Cloud Functions 後端)
                     try {
                         for (const m of memos) {
                             const plainText = m.text || ''; const plainNote = m.note || ''; const plainImgs = m.images || [];
                             const reEnc = await encryptMemoFields({ text: plainText, note: plainNote, images: plainImgs }, newEncKey);
                             await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId, m.id), { text: reEnc.text, note: reEnc.note, _encImages: reEnc._encImages, images: reEnc.images });
                         }
+<<<<<<< HEAD
                     } catch(reEncErr) { console.error('Re-encrypt failed:', reEncErr); }
                     showToast('\u5bc6\u78bc\u5df2\u66f4\u65b0\uff01\u8acb\u91cd\u65b0\u767b\u5165', 'success');
                     // Force re-login after password change - invalidates old session
@@ -1206,6 +1322,18 @@
                 }
             } catch (err) { console.error(err); cpwError.textContent = '\u66f4\u6539\u5931\u6557\uff0c\u8acb\u7a0d\u5f8c\u518d\u8a66'; cpwError.classList.remove('hidden'); }
             submitBtn.disabled = false; submitBtn.textContent = '\u78ba\u8a8d\u66f4\u6539';
+=======
+                    } catch (reEncErr) { console.error('Re-encrypt failed:', reEncErr); }
+                    showToast('密碼已更新！請重新登入', 'success');
+                    setTimeout(() => { window.location.reload(); }, 1500);
+                }
+            } catch (err) {
+                const msg = err?.message || '更改失敗，請稍後再試';
+                cpwError.textContent = msg; cpwError.classList.remove('hidden');
+                console.error(err);
+            }
+            submitBtn.disabled = false; submitBtn.textContent = '確認更改';
+>>>>>>> 8e9ea2c (feat: 密碼驗證移至 Firebase Cloud Functions 後端)
         });
 
         window.toggleCpwEye = (inputId, iconId) => {
@@ -1278,7 +1406,7 @@
                 sortDropdownBtn.style.cssText = isActive ? SORT_ACTIVE_STYLE : 'color:rgba(255,255,255,0.35)';
             }
             // 更新各選項樣式
-            ['default','priority','newest','oldest','due','edited'].forEach(k => {
+            ['default', 'priority', 'newest', 'oldest', 'due', 'edited'].forEach(k => {
                 const el = document.getElementById('sm-' + k);
                 if (!el) return;
                 if (k === mode) {

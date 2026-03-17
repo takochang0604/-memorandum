@@ -1,0 +1,13 @@
+# Node.js 依賴不上傳
+functions/node_modules/
+
+# Firebase 本地快取
+.firebase/
+
+# 環境設定（含機密資訊勿上傳）
+.env
+.env.*
+
+# OS 自動產生
+.DS_Store
+Thumbs.db

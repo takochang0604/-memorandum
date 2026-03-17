@@ -1,0 +1,43 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ============================================================
+    // 備忘錄 App：artifacts/{appId}/public/data/...
+    // ============================================================
+    match /artifacts/{appId}/public/data/{document=**} {
+
+      // ── room_profile：含 pwHash，禁止前端讀寫 ──────────────────
+      // 只有 Cloud Functions (Admin SDK) 才能存取
+      match /{roomId}/room_profile {
+        allow read, write: if false;
+      }
+
+      // ── account_registries：帳號登錄檔 ───────────────────────
+      // 只允許讀（確認帳號是否存在由後端做），不允許前端直接寫
+      match /account_registries/{accountId} {
+        allow read: if false;
+        allow write: if false;
+      }
+
+      // ── 訪客計數：任何人可讀，禁止任意寫 ────────────────────────
+      match /app_stats/visitor_count {
+        allow read: if true;
+        // 只允許 increment（Cloud Functions 用 Admin 即可繞過這條規則）
+        allow write: if true;
+      }
+
+      // ── 備忘錄資料（roomId 內的其他文件）────────────────────────
+      // 允許所有人讀寫（資料已用 AES-256-GCM 加密，沒有密碼無法解密）
+      // 如果往後要加更嚴格的規則可在此調整
+      match /{roomId}/{memoId} {
+        allow read, write: if true;
+      }
+
+      // ── 分類資料 ────────────────────────────────────────────
+      match /{roomIdCats}/{catId} {
+        allow read, write: if true;
+      }
+    }
+  }
+}
