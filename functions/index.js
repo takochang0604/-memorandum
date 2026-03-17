@@ -98,7 +98,7 @@ function resetLoginAttempts(ip) {
  *   失敗 → HttpsError
  */
 exports.verifyLogin = onCall(
-  { region: "asia-east1", cors: true },
+  { region: "asia-east1", cors: true, invoker: "public" },
   async (request) => {
     const ip = request.rawRequest?.ip || "unknown";
     const { accountId, password } = request.data || {};
@@ -198,7 +198,7 @@ exports.verifyLogin = onCall(
  * 建立新帳號（後端執行，密碼 hash 計算在伺服器）
  */
 exports.createAccount = onCall(
-  { region: "asia-east1", cors: true },
+  { region: "asia-east1", cors: true, invoker: "public" },
   async (request) => {
     const { accountId, password } = request.data || {};
 
@@ -271,7 +271,7 @@ exports.createAccount = onCall(
  * 注意：備忘錄內容重加密仍由前端做（因為加密 key 來自密碼，後端不持有）
  */
 exports.changePassword = onCall(
-  { region: "asia-east1", cors: true },
+  { region: "asia-east1", cors: true, invoker: "public" },
   async (request) => {
     const { accountId, oldPassword, newPassword, roomId } = request.data || {};
 
