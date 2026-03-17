@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW">
 
 <head>
@@ -1010,25 +1010,8 @@
             e.preventDefault(); if (!isAuthReady) { showToast('資料庫連線中...', 'info'); return; }
             if (authError) authError.classList.add('hidden');
 
-<<<<<<< HEAD
-            // 登入節流檢查
-            if (Date.now() < loginLockedUntil) {
-                const secs = Math.ceil((loginLockedUntil - Date.now()) / 1000);
-                authError.textContent = `登入嘗試次數過多，請 ${secs} 秒後再試`;
-                authError.classList.remove('hidden');
-                return;
-            } else if (loginLockedUntil > 0 && Date.now() >= loginLockedUntil) {
-                // 鎖定期已過，重置計數
-                loginAttempts = 0;
-                loginLockedUntil = 0;
-            }
-            // \u5efa\u7acb\u6a21\u5f0f\uff1a\u78ba\u8a8d\u5bc6\u78bc\u9a57\u8b49
-            const aid = authAccountId.value.trim(); const pw = authPassword.value;
-            if (aid.length < 4 || pw.length < 4) { if (authError) { authError.textContent = '\u5e33\u865f\u548c\u5bc6\u78bc\u9577\u5ea6\u81f3\u5c114\u78bc\uff01'; authError.classList.remove('hidden'); } return; }
-=======
             const aid = authAccountId.value.trim(); const pw = authPassword.value;
             if (aid.length < 4 || pw.length < 4) { if (authError) { authError.textContent = '帳號和密碼長度至少4碼！'; authError.classList.remove('hidden'); } return; }
->>>>>>> 8e9ea2c (feat: 密碼驗證移至 Firebase Cloud Functions 後端)
             if (isCreateMode) {
                 const cpw = authConfirmPassword ? authConfirmPassword.value : '';
                 if (pw !== cpw) { authError.textContent = '兩次輸入的密碼不一致！'; authError.classList.remove('hidden'); return; }
@@ -1036,63 +1019,6 @@
 
             authSubmitBtn.disabled = true; authSubmitBtn.innerHTML = '<i data-lucide="loader-2" class="animate-spin"></i><span>處理中...</span>'; lucide.createIcons();
             try {
-<<<<<<< HEAD
-                const hCode = await hashCredentials(aid, pw); const aidHashBuf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('twai-room-' + aid.toLowerCase().trim())); const rId = 'memos_v2_' + Array.from(new Uint8Array(aidHashBuf)).map(b => b.toString(16).padStart(2,'0')).join('').substring(0,24); const pRef = doc(db, 'artifacts', appId, 'public', 'data', rId, 'room_profile');
-                if (isCreateMode) {
-                    const rRef = doc(db, 'artifacts', appId, 'public', 'data', 'account_registries', aid);
-                    if ((await getDoc(rRef)).exists()) { authError.textContent = '帳號已被使用！'; authError.classList.remove('hidden'); }
-                    else {
-                        await setDoc(rRef, { created: Date.now(), roomId: rId });
-                        await setDoc(pRef, { created: Date.now(), accountId: aid, migratedCategories: true, pwHash: hCode });
-                        const catsRef = collection(db, 'artifacts', appId, 'public', 'data', rId + '_categories');
-                        await setDoc(doc(catsRef, 'cat_work'), { ...INITIAL_WORK_CAT, createdAt: Date.now() });
-                        await setDoc(doc(catsRef, 'cat_personal'), { ...INITIAL_PERSONAL_CAT, createdAt: Date.now() + 1 });
-                        currentRoomId = rId; currentAccountId = aid; currentEncKey = await deriveEncryptionKey(aid, pw); showToast('\u5efa\u7acb\u6210\u529f\uff01');
-                    }
-                } else {
-                    const rRef = doc(db, 'artifacts', appId, 'public', 'data', 'account_registries', aid);
-                    const rSnap = await getDoc(rRef);
-                    if (!rSnap.exists()) {
-                        // 帳號不存在：統一錯誤訊息，防帳號枚舉
-                        loginAttempts++;
-                        if (loginAttempts >= 5) { loginLockedUntil = Date.now() + 60000; }
-                        authError.textContent = '帳號或密碼錯誤！'; authError.classList.remove('hidden');
-                    } else {
-                        const storedRoomId = rSnap.data().roomId;
-                        const actualRoomId = storedRoomId || rId;
-                        const actualPRef = doc(db, 'artifacts', appId, 'public', 'data', actualRoomId, 'room_profile');
-                        const pSnap = await getDoc(actualPRef);
-                        if (!pSnap.exists()) {
-                            loginAttempts++;
-                            if (loginAttempts >= 5) { loginLockedUntil = Date.now() + 60000; }
-                            authError.textContent = '帳號或密碼錯誤！'; authError.classList.remove('hidden');
-                        } else {
-                            const storedHash = pSnap.data().pwHash;
-                            // 偵測舊版帳號（pwHash 無 v2: 前綴）
-                            const isLegacyAccount = storedHash && !storedHash.startsWith('v2:');
-                            let hashMatch = false;
-                            if (isLegacyAccount) {
-                                // 舊帳號：用舊版 SHA-256 驗證，通過後升級到 PBKDF2
-                                const legacyHash = await hashCredentialsLegacy(aid, pw);
-                                hashMatch = (storedHash === legacyHash);
-                            } else {
-                                hashMatch = (!storedHash || storedHash === hCode);
-                            }
-                            if (!hashMatch) {
-                                loginAttempts++;
-                                if (loginAttempts >= 5) { loginLockedUntil = Date.now() + 60000; }
-                                // 統一錯誤訊息，防帳號枚舉
-                                authError.textContent = '帳號或密碼錯誤！';
-                                authError.classList.remove('hidden');
-                            } else {
-                                loginAttempts = 0;
-                                // 舊帳號：升級 pwHash 為 PBKDF2
-                                if (!storedHash || isLegacyAccount) await updateDoc(actualPRef, { pwHash: hCode });
-                                if (!storedRoomId) await updateDoc(rRef, { roomId: actualRoomId });
-                                currentRoomId = actualRoomId; currentAccountId = aid; currentEncKey = await deriveEncryptionKey(aid, pw); showToast('\u767b\u5165\u6210\u529f');
-                            }
-                        }
-=======
                 if (isCreateMode) {
                     // ★ 建立帳號：呼叫後端 Cloud Function（密碼 hash 在伺服器計算）
                     const result = await fnCreateAccount({ accountId: aid, password: pw });
@@ -1110,7 +1036,6 @@
                         currentAccountId = aid;
                         currentEncKey = await deriveEncryptionKey(aid, pw);
                         showToast('登入成功');
->>>>>>> 8e9ea2c (feat: 密碼驗證移至 Firebase Cloud Functions 後端)
                     }
                 }
                 if (currentRoomId) {
@@ -1224,34 +1149,11 @@
             const oldPw = document.getElementById('cpw-old').value;
             const newPw = document.getElementById('cpw-new').value;
             const confirmPw = document.getElementById('cpw-confirm').value;
-<<<<<<< HEAD
-            if (newPw !== confirmPw) { cpwError.textContent = '\u65b0\u5bc6\u78bc\u4e0d\u4e00\u81f4\uff01'; cpwError.classList.remove('hidden'); return; }
-            if (newPw.length < 4) { cpwError.textContent = '\u5bc6\u78bc\u81f3\u55504\u78bc'; cpwError.classList.remove('hidden'); return; }
-=======
             if (newPw !== confirmPw) { cpwError.textContent = '新密碼不一致！'; cpwError.classList.remove('hidden'); return; }
             if (newPw.length < 4) { cpwError.textContent = '密碼至少 4 碼'; cpwError.classList.remove('hidden'); return; }
->>>>>>> 8e9ea2c (feat: 密碼驗證移至 Firebase Cloud Functions 後端)
             const submitBtn = document.getElementById('cpw-submit');
             submitBtn.disabled = true; submitBtn.textContent = '\u66f4\u6539\u4e2d...';
             try {
-<<<<<<< HEAD
-                const oldHash = await hashCredentials(currentAccountId, oldPw);
-                const pRef = doc(db, 'artifacts', appId, 'public', 'data', currentRoomId, 'room_profile');
-                const pSnap = await getDoc(pRef);
-                const storedHash = pSnap.data().pwHash;
-                // Support legacy SHA-256 and new PBKDF2 (v2:) accounts
-                const isLegacyCpw = storedHash && !storedHash.startsWith('v2:');
-                let cpwMatch = false;
-                if (isLegacyCpw) { const legHash = await hashCredentialsLegacy(currentAccountId, oldPw); cpwMatch = (storedHash === legHash); }
-                else { cpwMatch = (!storedHash || storedHash === oldHash); }
-                if (!cpwMatch) { cpwError.textContent = '\u76ee\u524d\u5bc6\u78bc\u932f\u8aa4\uff01'; cpwError.classList.remove('hidden'); }
-                else {
-                    const newHash = await hashCredentials(currentAccountId, newPw);
-                    await updateDoc(pRef, { pwHash: newHash });
-                    // Re-encrypt all memos with new key before reloading
-                    const newEncKey = await deriveEncryptionKey(currentAccountId, newPw);
-                    showToast('\u5bc6\u78bc\u66f4\u65b0\u4e2d\uff0c\u91cd\u65b0\u52a0\u5bc6\u8cc7\u6599...', 'info');
-=======
                 // ★ 改密碼：舊密碼驗證在後端執行，前端只做 re-encrypt
                 const result = await fnChangePassword({
                     accountId: currentAccountId,
@@ -1262,23 +1164,12 @@
                 if (result.data.success) {
                     const newEncKey = await deriveEncryptionKey(currentAccountId, newPw);
                     showToast('密碼更新中，重新加密資料...', 'info');
->>>>>>> 8e9ea2c (feat: 密碼驗證移至 Firebase Cloud Functions 後端)
                     try {
                         for (const m of memos) {
                             const plainText = m.text || ''; const plainNote = m.note || ''; const plainImgs = m.images || [];
                             const reEnc = await encryptMemoFields({ text: plainText, note: plainNote, images: plainImgs }, newEncKey);
                             await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId, m.id), { text: reEnc.text, note: reEnc.note, _encImages: reEnc._encImages, images: reEnc.images });
                         }
-<<<<<<< HEAD
-                    } catch(reEncErr) { console.error('Re-encrypt failed:', reEncErr); }
-                    showToast('\u5bc6\u78bc\u5df2\u66f4\u65b0\uff01\u8acb\u91cd\u65b0\u767b\u5165', 'success');
-                    // Force re-login after password change - invalidates old session
-                    setTimeout(() => { window.location.reload(); }, 1500);
-                    setTimeout(() => { window.location.reload(); }, 1500);
-                }
-            } catch (err) { console.error(err); cpwError.textContent = '\u66f4\u6539\u5931\u6557\uff0c\u8acb\u7a0d\u5f8c\u518d\u8a66'; cpwError.classList.remove('hidden'); }
-            submitBtn.disabled = false; submitBtn.textContent = '\u78ba\u8a8d\u66f4\u6539';
-=======
                     } catch (reEncErr) { console.error('Re-encrypt failed:', reEncErr); }
                     showToast('密碼已更新！請重新登入', 'success');
                     setTimeout(() => { window.location.reload(); }, 1500);
@@ -1289,7 +1180,6 @@
                 console.error(err);
             }
             submitBtn.disabled = false; submitBtn.textContent = '確認更改';
->>>>>>> 8e9ea2c (feat: 密碼驗證移至 Firebase Cloud Functions 後端)
         });
 
         window.toggleCpwEye = (inputId, iconId) => {
