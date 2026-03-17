@@ -968,17 +968,37 @@
         }
 
         // --- 初始化與驗證 ---
+        // Fallback: 最多等 6 秒，如果 Firebase Auth 沒完成就強制顯示登入畫面
+        const authFallbackTimer = setTimeout(() => {
+            if (authContainer && authContainer.classList.contains('hidden')) {
+                authContainer.classList.remove('hidden');
+                lucide.createIcons();
+                const subtitle = document.getElementById('auth-subtitle');
+                if (subtitle) subtitle.textContent = '（離線模式：資料庫連線較慢，功能可能受限）';
+                console.warn('Auth fallback triggered');
+            }
+        }, 6000);
+
         const initAuth = async () => {
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     try { await signInWithCustomToken(auth, __initial_auth_token); } catch (e) { await signInAnonymously(auth); }
                 } else { await signInAnonymously(auth); }
             }
-            catch (error) { console.error(error); if (document.getElementById('auth-subtitle')) document.getElementById('auth-subtitle').innerHTML = '資料庫連線異常，請重新整理。'; }
+            catch (error) {
+                console.error(error);
+                // 即使匿名登入失敗，也要顯示登入畫面讓使用者看到錯誤
+                clearTimeout(authFallbackTimer);
+                if (authContainer) authContainer.classList.remove('hidden');
+                lucide.createIcons();
+                const subtitle = document.getElementById('auth-subtitle');
+                if (subtitle) subtitle.textContent = '資料庫連線異常，請重新整理頁面。';
+            }
         };
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
+                clearTimeout(authFallbackTimer);
                 isAuthReady = true; if (authContainer) authContainer.classList.remove('hidden'); lucide.createIcons();
                 const statsRef = doc(db, 'artifacts', appId, 'public', 'data', 'app_stats', 'visitor_count');
                 onSnapshot(statsRef, (docSnap) => {
