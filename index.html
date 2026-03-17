@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 
 <head>
@@ -1007,7 +1007,7 @@
         if (togglePasswordBtn) togglePasswordBtn.addEventListener('click', () => { const isV = authPassword.type === 'text'; authPassword.type = isV ? 'password' : 'text'; togglePasswordBtn.innerHTML = `<i data-lucide="${isV ? 'eye' : 'eye-off'}" class="w-5 h-5"></i>`; lucide.createIcons(); });
 
         if (authForm) authForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); if (!isAuthReady) { showToast('資料庫連線中...', 'info'); return; }
+            e.preventDefault();
             if (authError) authError.classList.add('hidden');
 
             const aid = authAccountId.value.trim(); const pw = authPassword.value;
