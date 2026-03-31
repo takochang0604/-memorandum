@@ -92,21 +92,6 @@
             box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
         }
 
-        .priority-high {
-            border-left: 3px solid #f43f5e;
-        }
-
-        .priority-medium {
-            border-left: 3px solid #f59e0b;
-        }
-
-        .priority-low {
-            border-left: 3px solid #10b981;
-        }
-
-        .priority-none {
-            border-left: 3px solid rgba(255, 255, 255, 0.1);
-        }
 
         .gradient-text {
             background: linear-gradient(135deg, #a78bfa, #60a5fa);
@@ -129,6 +114,19 @@
             word-break: break-word;
         }
 
+
+        /* ========== 手機版卡片優化 ========== */
+        @media (max-width: 640px) {
+            .memo-card .card-actions { display: none !important; }
+            .memo-card.active .card-actions { display: flex !important; }
+            .memo-card.active .card-actions button { opacity: 1 !important; }
+            .memo-card .hide-mobile { display: none !important; }
+            .memo-card .show-mobile-only { display: inline-flex !important; }
+            .memo-card { padding-left: 12px !important; padding-right: 12px !important; padding-top: 10px !important; padding-bottom: 10px !important; }
+        }
+        @media (min-width: 641px) {
+            .memo-card .show-mobile-only { display: none !important; }
+        }
         /* ========== 廣告側邊欄 ========== */
         .ad-sidebar {
             position: fixed; top: 0; right: 0; height: 100vh; z-index: 1000;
@@ -196,30 +194,6 @@
     <div id="toast-container"
         class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] flex flex-col gap-3 pointer-events-none"></div>
 
-    <!-- 全域排序選單（fixed，注射到 body，完全脱離任何 overflow 容器） -->
-    <div id="sort-dropdown-menu" class="hidden fixed z-[75] rounded-xl overflow-hidden shadow-2xl"
-        style="background:rgba(20,18,50,0.97);border:1px solid rgba(255,255,255,0.15);min-width:164px">
-        <div class="px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest"
-            style="color:rgba(255,255,255,0.3);border-bottom:1px solid rgba(255,255,255,0.07)">排序方式</div>
-        <button onclick="window.setSortMode('default')" id="sm-default"
-            class="sort-opt w-full text-left px-3 py-2.5 text-xs font-semibold flex items-center gap-2"
-            style="color:rgba(255,255,255,0.85)"><i data-lucide="grip-vertical" class="w-3.5 h-3.5"></i>自訂順序</button>
-        <button onclick="window.setSortMode('priority')" id="sm-priority"
-            class="sort-opt w-full text-left px-3 py-2.5 text-xs font-semibold flex items-center gap-2"
-            style="color:rgba(255,255,255,0.55)"><i data-lucide="flame" class="w-3.5 h-3.5"></i>優先級（高→低）</button>
-        <button onclick="window.setSortMode('newest')" id="sm-newest"
-            class="sort-opt w-full text-left px-3 py-2.5 text-xs font-semibold flex items-center gap-2"
-            style="color:rgba(255,255,255,0.55)"><i data-lucide="clock" class="w-3.5 h-3.5"></i>建立時間（新→舊）</button>
-        <button onclick="window.setSortMode('oldest')" id="sm-oldest"
-            class="sort-opt w-full text-left px-3 py-2.5 text-xs font-semibold flex items-center gap-2"
-            style="color:rgba(255,255,255,0.55)"><i data-lucide="history" class="w-3.5 h-3.5"></i>建立時間（舊→新）</button>
-        <button onclick="window.setSortMode('due')" id="sm-due"
-            class="sort-opt w-full text-left px-3 py-2.5 text-xs font-semibold flex items-center gap-2"
-            style="color:rgba(255,255,255,0.55)"><i data-lucide="calendar" class="w-3.5 h-3.5"></i>截止日期（近→遠）</button>
-        <button onclick="window.setSortMode('edited')" id="sm-edited"
-            class="sort-opt w-full text-left px-3 py-2.5 text-xs font-semibold flex items-center gap-2"
-            style="color:rgba(255,255,255,0.55)"><i data-lucide="pencil" class="w-3.5 h-3.5"></i>編輯時間（新→舊）</button>
-    </div>
 
     <!-- 全域客製化確認彈窗 -->
     <div id="confirm-modal"
@@ -444,40 +418,13 @@
                                     style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);"
                                     autocomplete="off"></textarea>
                             </div>
-                            <!-- 開始日期 + 截止日期 + 優先級 -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-xs font-bold mb-1.5 uppercase tracking-wider"
-                                        style="color:rgba(255,255,255,0.4)">開始日期（選填）</label>
-                                    <input type="date" id="memo-start-date"
-                                        class="w-full p-2.5 rounded-xl outline-none text-sm"
-                                        style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.8);">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold mb-1.5 uppercase tracking-wider"
-                                        style="color:rgba(255,255,255,0.4)">截止日期（選填）</label>
-                                    <input type="date" id="memo-due-date"
-                                        class="w-full p-2.5 rounded-xl outline-none text-sm"
-                                        style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.8);">
-                                </div>
-                            </div>
+                            <!-- 截止日期 -->
                             <div>
                                 <label class="block text-xs font-bold mb-1.5 uppercase tracking-wider"
-                                    style="color:rgba(255,255,255,0.4)">優先級</label>
-                                <div class="flex gap-2" id="priority-selector">
-                                    <button type="button" onclick="window.setPriority('high')" id="pri-high"
-                                        class="flex-1 py-2 rounded-xl text-xs font-bold transition-all"
-                                        style="background:rgba(244,63,94,0.15);color:#fda4af;border:1px solid rgba(244,63,94,0.2)">⬤
-                                        高</button>
-                                    <button type="button" onclick="window.setPriority('medium')" id="pri-medium"
-                                        class="flex-1 py-2 rounded-xl text-xs font-bold transition-all"
-                                        style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.1)">⬤
-                                        中</button>
-                                    <button type="button" onclick="window.setPriority('low')" id="pri-low"
-                                        class="flex-1 py-2 rounded-xl text-xs font-bold transition-all"
-                                        style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.1)">⬤
-                                        低</button>
-                                </div>
+                                    style="color:rgba(255,255,255,0.4)">截止日期（選填）</label>
+                                <input type="date" id="memo-due-date"
+                                    class="w-full p-2.5 rounded-xl outline-none text-sm"
+                                    style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.8);">
                             </div>
                             <div class="rounded-xl p-3"
                                 style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08)">
@@ -539,19 +486,6 @@
                         <button onclick="window.setStatusFilter('overdue')" id="sf-overdue"
                             class="flex-shrink-0 px-2.5 py-1 text-[11px] font-bold rounded-lg transition-all"
                             style="color:rgba(255,255,255,0.4)">⚠️ 逾期</button>
-                        <div class="w-px mx-0.5 self-stretch" style="background:rgba(255,255,255,0.12)"></div>
-                        <button onclick="window.setPriFilter('')" id="pf-all"
-                            class="flex-shrink-0 px-2.5 py-1 text-[11px] font-bold rounded-lg transition-all"
-                            style="background:rgba(255,255,255,0.15);color:white">○ 任意級</button>
-                        <button onclick="window.setPriFilter('high')" id="pf-high"
-                            class="flex-shrink-0 px-2.5 py-1 text-[11px] font-bold rounded-lg transition-all"
-                            style="color:rgba(255,255,255,0.4)">⬤ 高</button>
-                        <button onclick="window.setPriFilter('medium')" id="pf-medium"
-                            class="flex-shrink-0 px-2.5 py-1 text-[11px] font-bold rounded-lg transition-all"
-                            style="color:rgba(255,255,255,0.4)">⬤ 中</button>
-                        <button onclick="window.setPriFilter('low')" id="pf-low"
-                            class="flex-shrink-0 px-2.5 py-1 text-[11px] font-bold rounded-lg transition-all"
-                            style="color:rgba(255,255,255,0.4)">⬤ 低</button>
                     </div>
                 </div>
                 <!-- 清除 + 排序 + 緊湊模式 -->
@@ -562,15 +496,7 @@
                         style="color:rgba(255,100,100,0.7)">
                         <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>清除已完成
                     </button>
-                    <!-- 排序下拉選單（使用 fixed 定位，避免被父容器 overflow 裁切） -->
-                    <div class="relative" id="sort-dropdown-wrap">
-                        <button id="sort-dropdown-btn" title="排序方式"
-                            class="flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-xl transition-all"
-                            style="color:rgba(255,255,255,0.35)">
-                            <i data-lucide="arrow-up-down" class="w-3.5 h-3.5"></i><span id="sort-btn-label">排序</span>
-                        </button>
-                    </div>
-                    <!-- 全域排序選單，掛在 body 下以 fixed 定位 -->
+
                     <button id="compact-view-btn" title="緊湊模式"
                         class="flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-xl transition-all"
                         style="color:rgba(255,255,255,0.35)">
@@ -753,7 +679,6 @@
         let currentFilter = 'all';
         let currentSearch = '';
         let currentStatusFilter = 'all'; // 'all' | 'todo' | 'done' | 'overdue'
-        let currentPriFilter = '';       // '' | 'high' | 'medium' | 'low'
         let editingMemoId = null;
         let isAuthReady = false;
         let isCreateMode = false;
@@ -761,7 +686,6 @@
         let existingImages = [];
         let unsubscribeSnapshot = null;
         let unsubscribeCategories = null;
-        let priorityLevel = 'high'; // 'high' | 'medium' | 'low'
         let compactView = false;
         let currentEncKey = null; // AES-256 encryption key derived from password
 
@@ -1084,15 +1008,7 @@
                         localStorage.removeItem('twai_memo_saved_account');
                     }
                     roomCodeDisplay.textContent = currentAccountId; authContainer.classList.add('hidden'); appContainer.classList.remove('hidden'); showFab();
-                    // 讀取該帳號儲存的排序方式，沒有則用預設「優先級」
-                    const savedSort = localStorage.getItem(SORT_STORAGE_KEY(currentAccountId));
-                    const validModes = ['default', 'priority', 'newest', 'oldest', 'due', 'edited'];
-                    if (savedSort && validModes.includes(savedSort)) {
-                        currentSortMode = savedSort;
-                    } else {
-                        currentSortMode = 'priority';
-                    }
-                    window.setSortMode(currentSortMode);
+                    // 排序已固定為拖曳排序，不需讀取
                     unsubscribeCategories = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', currentRoomId + '_categories'), (snap) => { categories = []; snap.forEach(d => categories.push({ id: d.id, ...d.data() })); categories.sort((a, b) => a.createdAt - b.createdAt); if (categories.length > 0 && !selectedCategory) selectedCategory = categories[0].id; renderApp(); });
                     unsubscribeSnapshot = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', currentRoomId), async (snap) => { const raw = []; snap.forEach(d => { if (d.id !== 'room_profile') raw.push({ id: d.id, ...d.data() }); }); memos = await Promise.all(raw.map(m => decryptMemoFields(m, currentEncKey))); isLoading = false; renderApp(); setTimeout(() => cleanupExpiredImages(), 2000); });
                 }
@@ -1141,20 +1057,7 @@
             });
             renderMemos();
         };
-        window.setPriFilter = (v) => {
-            currentPriFilter = v;
-            const PRI_ACTIVE = { '': 'rgba(255,255,255,0.15)', high: 'rgba(244,63,94,0.25)', medium: 'rgba(245,158,11,0.25)', low: 'rgba(16,185,129,0.25)' };
-            const PRI_COLORS = { '': 'white', high: '#fda4af', medium: '#fcd34d', low: '#6ee7b7' };
-            ['', 'high', 'medium', 'low'].forEach(k => {
-                const id = k === '' ? 'pf-all' : 'pf-' + k;
-                const btn = document.getElementById(id);
-                if (!btn) return;
-                btn.style.background = k === v ? PRI_ACTIVE[k] : '';
-                btn.style.color = k === v ? PRI_COLORS[k] : 'rgba(255,255,255,0.4)';
-                btn.style.fontWeight = k === v ? '700' : '';
-            });
-            renderMemos();
-        };
+
 
         // --- 擴展 editMemo 顯示「編輯中」 badge + 自動展開輸入區 ---
         const _origCancelEdit = window.cancelEditFn;
@@ -1271,86 +1174,11 @@
             renderMemos();
         });
         // --- 排序下拉選單 ---
-        // 預設排序為「優先級」，登入後會讀取該帳號儲存的排序方式
-        let currentSortMode = 'priority'; // 'default' | 'priority' | 'newest' | 'oldest' | 'due' | 'edited'
-        const SORT_LABELS = { default: '排序', priority: '優先級↓', newest: '最新', oldest: '最舊', due: '截止日', edited: '編輯時間' };
-        const SORT_STORAGE_KEY = (accountId) => `twai_memo_sort_${accountId}`;
-        const SORT_ACTIVE_STYLE = 'background:rgba(167,139,250,0.2);color:#c4b5fd;border:1px solid rgba(167,139,250,0.35)';
-        const SORT_INACTIVE_STYLE = 'color:rgba(255,255,255,0.55)';
-        const sortDropdownBtn = document.getElementById('sort-dropdown-btn');
-        const sortDropdownMenu = document.getElementById('sort-dropdown-menu');
-        const sortDropdownWrap = document.getElementById('sort-dropdown-wrap');
-
-        window.setSortMode = (mode) => {
-            currentSortMode = mode;
-            const label = document.getElementById('sort-btn-label');
-            if (label) label.textContent = SORT_LABELS[mode] || '排序';
-            const isActive = mode !== 'default';
-            if (sortDropdownBtn) {
-                sortDropdownBtn.style.cssText = isActive ? SORT_ACTIVE_STYLE : 'color:rgba(255,255,255,0.35)';
-            }
-            // 更新各選項樣式
-            ['default', 'priority', 'newest', 'oldest', 'due', 'edited'].forEach(k => {
-                const el = document.getElementById('sm-' + k);
-                if (!el) return;
-                if (k === mode) {
-                    el.style.color = '#c4b5fd';
-                    el.style.background = 'rgba(167,139,250,0.18)';
-                } else {
-                    el.style.color = 'rgba(255,255,255,0.6)';
-                    el.style.background = '';
-                }
-            });
-            if (sortDropdownMenu) sortDropdownMenu.classList.add('hidden');
-            lucide.createIcons();
-            // 將排序方式儲存到 localStorage（以帳號為 key）
-            if (currentAccountId) {
-                localStorage.setItem(SORT_STORAGE_KEY(currentAccountId), mode);
-            }
-            renderMemos();
-        };
-
-        if (sortDropdownBtn) {
-            sortDropdownBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const menu = document.getElementById('sort-dropdown-menu');
-                if (!menu) return;
-                if (menu.classList.contains('hidden')) {
-                    // 計算 fixed 定位：按鈕的位置
-                    const rect = sortDropdownBtn.getBoundingClientRect();
-                    menu.style.right = 'auto';
-                    menu.style.bottom = 'auto';
-                    // 選單寬度約 180px，從按鈕右邊對齊
-                    const menuW = 180;
-                    let left = rect.right - menuW;
-                    if (left < 8) left = 8;
-                    menu.style.left = left + 'px';
-                    // 優先顯示在按鈕上方，若空間不夠則顯示在下方
-                    const menuH = 260;
-                    if (rect.top > menuH + 8) {
-                        menu.style.top = (rect.top - menuH - 4) + 'px';
-                    } else {
-                        menu.style.top = (rect.bottom + 4) + 'px';
-                    }
-                    menu.classList.remove('hidden');
-                    lucide.createIcons();
-                } else {
-                    menu.classList.add('hidden');
-                }
-            });
-        }
-        document.addEventListener('click', (e) => {
-            const menu = document.getElementById('sort-dropdown-menu');
-            if (sortDropdownWrap && !sortDropdownWrap.contains(e.target) && menu && !menu.contains(e.target)) {
-                menu.classList.add('hidden');
-            }
-        });
-        // 初始化排序按鈕選項狀態（登入前先用預設值設好 UI）
-        window.setSortMode(currentSortMode);
+        const currentSortMode = 'default';
 
         if (memoInput) memoInput.addEventListener('input', () => { clearInputBtn.classList.toggle('hidden', memoInput.value.trim().length === 0); updateSubmitButtonState(); });
         if (clearInputBtn) clearInputBtn.addEventListener('click', () => { memoInput.value = ''; clearInputBtn.classList.add('hidden'); updateSubmitButtonState(); memoInput.focus(); });
-        if (cancelEditBtn) cancelEditBtn.addEventListener('click', () => { memoInput.value = ''; editingMemoId = null; existingImages = []; pendingImageFiles = []; const dd = document.getElementById('memo-due-date'); if (dd) dd.value = ''; const sd = document.getElementById('memo-start-date'); if (sd) sd.value = ''; const nd = document.getElementById('memo-note'); if (nd) nd.value = ''; priorityLevel = 'high'; renderImagePreviews(); cancelEditBtn.classList.add('hidden'); updateSubmitButtonState(); window.setPriority('high'); });
+        if (cancelEditBtn) cancelEditBtn.addEventListener('click', () => { memoInput.value = ''; editingMemoId = null; existingImages = []; pendingImageFiles = []; const dd = document.getElementById('memo-due-date'); if (dd) dd.value = ''; const nd = document.getElementById('memo-note'); if (nd) nd.value = ''; renderImagePreviews(); cancelEditBtn.classList.add('hidden'); updateSubmitButtonState(); });
 
         // Ctrl+Enter 快速新增
         [memoInput, document.getElementById('memo-note')].forEach(el => {
@@ -1359,20 +1187,7 @@
             });
         });
 
-        // 優先級選擇
-        const PRI_STYLES = {
-            high: { active: 'background:rgba(244,63,94,0.3);color:#fda4af;border:1px solid rgba(244,63,94,0.5)', inactive: 'background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.35);border:1px solid rgba(255,255,255,0.1)' },
-            medium: { active: 'background:rgba(245,158,11,0.3);color:#fcd34d;border:1px solid rgba(245,158,11,0.5)', inactive: 'background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.35);border:1px solid rgba(255,255,255,0.1)' },
-            low: { active: 'background:rgba(16,185,129,0.3);color:#6ee7b7;border:1px solid rgba(16,185,129,0.5)', inactive: 'background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.35);border:1px solid rgba(255,255,255,0.1)' }
-        };
-        window.setPriority = (lvl) => {
-            priorityLevel = lvl;
-            ['high', 'medium', 'low'].forEach(k => {
-                const btn = document.getElementById('pri-' + k);
-                if (btn) btn.style.cssText = (k === lvl ? PRI_STYLES[k].active : PRI_STYLES[k].inactive);
-            });
-        };
-        window.setPriority('high');
+
 
         function updateSubmitButtonState() {
             const hasC = !!selectedCategory; const hasT = memoInput.value.trim().length > 0 || pendingImageFiles.length > 0 || existingImages.length > 0;
@@ -1390,23 +1205,22 @@
                 const final = [...existingImages, ...newly];
                 const dueDateEl = document.getElementById('memo-due-date');
                 const dueDate = dueDateEl ? dueDateEl.value : '';
-                const startDateEl = document.getElementById('memo-start-date');
-                const startDate = startDateEl ? startDateEl.value : '';
+
                 const noteEl = document.getElementById('memo-note');
                 const note = noteEl ? noteEl.value.trim() : '';
                 if (editingMemoId) {
                     const old = memos.find(m => m.id === editingMemoId);
                     const oldImgs = old.images || (old.imageUrl ? [{ url: old.imageUrl, path: old.imagePath }] : []);
                     for (const o of oldImgs) { if (!existingImages.some(e => e.path === o.path) && o.path) await deleteObject(ref(storage, o.path)).catch(e => console.error(e)); }
-                    const encEdit = await encryptMemoFields({ text: memoInput.value.trim(), note, images: final }, currentEncKey); await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId, editingMemoId), { text: encEdit.text, note: encEdit.note, _encImages: encEdit._encImages, images: encEdit.images, category: selectedCategory, priority: priorityLevel, dueDate, startDate, updatedAt: Date.now() });
+                    const encEdit = await encryptMemoFields({ text: memoInput.value.trim(), note, images: final }, currentEncKey); await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId, editingMemoId), { text: encEdit.text, note: encEdit.note, _encImages: encEdit._encImages, images: encEdit.images, category: selectedCategory, dueDate, updatedAt: Date.now() });
                 } else {
-                    const encAdd = await encryptMemoFields({ text: memoInput.value.trim(), note, images: final }, currentEncKey); await setDoc(doc(collection(db, 'artifacts', appId, 'public', 'data', currentRoomId)), { text: encAdd.text, note: encAdd.note, _encImages: encAdd._encImages, images: encAdd.images, category: selectedCategory, completed: false, createdAt: Date.now(), order: Date.now() * -1, priority: priorityLevel, dueDate, startDate });
+                    const encAdd = await encryptMemoFields({ text: memoInput.value.trim(), note, images: final }, currentEncKey); await setDoc(doc(collection(db, 'artifacts', appId, 'public', 'data', currentRoomId)), { text: encAdd.text, note: encAdd.note, _encImages: encAdd._encImages, images: encAdd.images, category: selectedCategory, completed: false, createdAt: Date.now(), order: Date.now() * -1, dueDate });
                 }
                 memoInput.value = ''; editingMemoId = null; existingImages = []; pendingImageFiles = [];
                 if (dueDateEl) dueDateEl.value = '';
-                if (startDateEl) startDateEl.value = '';
+
                 if (noteEl) noteEl.value = '';
-                renderImagePreviews(); clearInputBtn.classList.add('hidden'); cancelEditBtn.classList.add('hidden'); window.setPriority('high');
+                renderImagePreviews(); clearInputBtn.classList.add('hidden'); cancelEditBtn.classList.add('hidden');
             } catch (err) { console.error(err); showToast('儲存失敗', 'error'); }
             updateSubmitButtonState();
         });
@@ -1454,7 +1268,6 @@
             const today = new Date().toISOString().split('T')[0];
             const filtered = memos.filter(m => {
                 if (currentFilter !== 'all' && m.category !== currentFilter) return false;
-                if (currentPriFilter && m.priority !== currentPriFilter) return false;
                 if (currentStatusFilter === 'todo' && m.completed) return false;
                 if (currentStatusFilter === 'done' && !m.completed) return false;
                 if (currentStatusFilter === 'overdue' && !(m.dueDate && m.dueDate < today && !m.completed)) return false;
@@ -1474,8 +1287,8 @@
                 const PRI_ORDER = { high: 0, medium: 1, low: 2 };
                 switch (currentSortMode) {
                     case 'priority': {
-                        const pa = a.priority in PRI_ORDER ? PRI_ORDER[a.priority] : 3;
-                        const pb = b.priority in PRI_ORDER ? PRI_ORDER[b.priority] : 3;
+                        const pa = 0;
+                        const pb = 0;
                         if (pa !== pb) return pa - pb;
                         break; // 同優先級→fallback
                     }
@@ -1525,8 +1338,6 @@
                 memoListContainer.innerHTML = `<div class="py-16 text-center" style="color:rgba(255,255,255,0.25)"><i data-lucide="${emptyIcon}" class="w-10 h-10 mx-auto mb-3" style="opacity:0.4"></i><div class="text-sm">${emptyMsg}</div></div>`;
                 lucide.createIcons(); return;
             }
-            const PRI_DOT = { high: '#f43f5e', medium: '#f59e0b', low: '#10b981' };
-            const PRI_LABEL = { high: '高', medium: '中', low: '低' };
             memoListContainer.innerHTML = `<ul class="grid grid-cols-1 gap-3 p-2" id="sortable-list">` + filtered.map(m => {
                 const c = categories.find(cat => cat.id === m.category) || { label: '未分類', icon: 'help-circle', color: 'text-slate-400', bgColor: '' };
                 const imgs = m.images || (m.imageUrl ? [{ url: m.imageUrl, path: m.imagePath }] : []);
@@ -1539,14 +1350,14 @@
                         imgH = `<div class="mt-2 grid ${cols} gap-1.5" style="max-height:160px">${imgs.map(i => `<div class="rounded-lg overflow-hidden cursor-zoom-in" style="height:75px;border:1px solid rgba(255,255,255,0.1)"><img src="${i.url}" class="w-full h-full object-cover" onclick="window.openLightbox('${i.url}')"></div>`).join('')}</div>`;
                     }
                 }
-                const priBadge = m.priority ? `<span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style="background:rgba(${m.priority === 'high' ? '244,63,94' : m.priority === 'medium' ? '245,158,11' : '16,185,129'},0.2);color:${PRI_DOT[m.priority]}">${PRI_LABEL[m.priority]}</span>` : '';
+                const priBadge = '';
                 const overdue = m.dueDate && m.dueDate < today && !m.completed;
                 const dueBadge = m.dueDate ? `<span class="text-[10px] font-semibold px-1.5 py-0.5 rounded-md" style="${overdue ? 'background:rgba(244,63,94,0.2);color:#fda4af' : 'background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.45)'}">${overdue ? '⚠️ ' : '📅 '}${m.dueDate}</span>` : '';
 
-                const startBadge = m.startDate ? `<span class="text-[10px] font-semibold px-1.5 py-0.5 rounded-md" style="background:rgba(96,165,250,0.15);color:rgba(147,197,253,0.9)">🗓 ${m.startDate}</span>` : '';
+
                 const cardBg = m.completed ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.07)';
                 const pinnedLeftBar = m.pinned && !m.completed ? 'border-left:3px solid rgba(251,191,36,0.6);' : '';
-                const pinnedBadge = m.pinned && !m.completed ? `<span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md flex items-center gap-0.5" style="background:rgba(251,191,36,0.18);color:#fbbf24"><i data-lucide="pin" class="w-2.5 h-2.5"></i>已釘選</span>` : '';
+                const pinnedBadge = m.pinned && !m.completed ? `<span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md flex items-center gap-0.5 hide-mobile" style="background:rgba(251,191,36,0.18);color:#fbbf24"><i data-lucide="pin" class="w-2.5 h-2.5"></i>已釘選</span>` : '';
                 // 非自訂順序時隱藏拖曳把手；自訂順序模式下全部（含釘選）都可拖曳
                 const dragDisabled = currentSortMode !== 'default';
                 const dragHandleStyle = dragDisabled
@@ -1563,25 +1374,23 @@
                         </div>
                         <div class="flex-grow min-w-0">
                             <div class="flex items-start justify-between gap-2">
-                                <div class="memo-text min-w-0" style="font-size:${compactView ? '12px' : '15px'};font-weight:${compactView ? '500' : '600'};color:${m.completed ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.92)'};${m.completed ? 'text-decoration:line-through' : ''};line-height:1.5;word-break:break-word">${linkify(m.text || '無內容')}</div>
+                                <div class="memo-text min-w-0" style="font-size:${compactView ? '12px' : '14px'};font-weight:${compactView ? '500' : '600'};color:${m.completed ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.92)'};${m.completed ? 'text-decoration:line-through' : ''};line-height:1.5;word-break:break-word">${linkify(m.text || '無內容')}</div>
                                 <div class="flex items-center gap-1 flex-shrink-0">
-                                    ${priBadge}
-                                    <div class="flex gap-0">
+                                    <div class="card-actions flex gap-0">
                                         <button onclick="window.togglePin('${m.id}')" class="p-1 rounded-lg transition-all opacity-40 hover:opacity-100" title="${m.pinned ? '取消釘選' : '釘選到頂部'}" style="color:${m.pinned ? '#fbbf24' : 'rgba(255,255,255,0.6)'}${m.pinned ? ';opacity:1;background:rgba(251,191,36,0.12)' : ''}"><i data-lucide="pin" class="w-3.5 h-3.5"></i></button>
-                                        <button onclick="window.editMemo('${m.id}')" class="p-1 rounded-lg transition-all opacity-0 group-hover:opacity-40 hover:!opacity-100" style="color:rgba(255,255,255,0.6)"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
-                                        <button onclick="window.deleteMemo('${m.id}')" class="p-1 rounded-lg transition-all opacity-0 group-hover:opacity-40 hover:!opacity-100" style="color:rgba(255,255,255,0.6)"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                                        <button onclick="window.editMemo('${m.id}')" class="p-1 rounded-lg transition-all opacity-40 hover:opacity-100" style="color:rgba(255,255,255,0.6)"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
+                                        <button onclick="window.deleteMemo('${m.id}')" class="p-1 rounded-lg transition-all opacity-40 hover:opacity-100" style="color:rgba(255,255,255,0.6)"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                                     </div>
                                 </div>
                             </div>
                             ${imgH}
-                            ${m.note && !compactView ? `<div class="mt-1 text-xs" style="color:rgba(255,255,255,0.35);white-space:pre-wrap;word-break:break-word;line-height:1.5">${linkify(m.note)}</div>` : ''}
+                            ${m.note && !compactView ? `<div class="mt-1 text-xs hide-mobile" style="color:rgba(255,255,255,0.35);white-space:pre-wrap;word-break:break-word;line-height:1.5">${linkify(m.note)}</div>` : ''}
                         </div>
                     </div>
                     <div class="${compactView ? 'mt-2 pt-1.5' : 'mt-2.5 pt-2'} flex items-center gap-1.5 flex-wrap" style="border-top:1px solid rgba(255,255,255,0.06)">
                         <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-semibold" style="${catBadgeStyle}"><i data-lucide="${c.icon}" class="w-2.5 h-2.5"></i>${c.label}</span>
-                        ${pinnedBadge}
-                        ${!compactView ? startBadge : ''}
-                        ${!compactView ? dueBadge : ''}
+
+                        ${!compactView && m.dueDate ? `<span class="hide-mobile">${dueBadge}</span><span class="show-mobile-only" style="display:none"><span class="text-[10px] font-semibold" style="${overdue ? 'color:#fda4af' : 'color:rgba(255,255,255,0.4)'}">${overdue ? '⚠️ ' : ''}${m.dueDate}</span></span>` : ''}
                         ${compactView && m.dueDate ? `<span class="text-[10px] font-semibold" style="${overdue ? 'color:#fda4af' : 'color:rgba(255,255,255,0.3)'}">${overdue ? '⚠️' : '📅'} ${m.dueDate}</span>` : ''}
                         <span class="ml-auto text-[10px]" style="color:rgba(255,255,255,0.2)">
                             ${m.updatedAt ? `<span style="color:rgba(167,139,250,0.6)" title="最後編輯時間"><i data-lucide="pencil" class="w-2.5 h-2.5 inline-block"></i> ${formatTime(m.updatedAt)}</span>` : `${formatTime(m.createdAt)}`}
@@ -1597,6 +1406,9 @@
                 new Sortable(listEl, {
                     handle: '.drag-handle',
                     animation: 150,
+                    delay: 150,
+                    delayOnTouchOnly: true,
+                    touchStartThreshold: 5,
                     // 不用 filter，改用 group + onMove 控制拖曳規則
                     onMove(evt) {
                         const dragged = evt.dragged;   // 正在拖的卡片
@@ -1652,9 +1464,8 @@
                 editingMemoId = id; memoInput.value = m.text || ''; selectedCategory = m.category;
                 existingImages = m.images ? [...m.images] : (m.imageUrl ? [{ url: m.imageUrl, path: m.imagePath }] : []);
                 pendingImageFiles = []; renderImagePreviews(); cancelEditBtn.classList.remove('hidden');
-                priorityLevel = m.priority || 'high'; window.setPriority(priorityLevel);
                 const dd = document.getElementById('memo-due-date'); if (dd) dd.value = m.dueDate || '';
-                const sd = document.getElementById('memo-start-date'); if (sd) sd.value = m.startDate || '';
+
                 const nd = document.getElementById('memo-note'); if (nd) nd.value = m.note || '';
                 // 顯示編輯中 badge + 展開輸入區
                 refreshEditingBadge();
@@ -1722,6 +1533,14 @@
                 if (formToggleIcon) formToggleIcon.style.transform = '';
             }
             if (memoInput) { memoInput.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => memoInput.focus(), 300); }
+        });
+
+        // --- 手機版卡片點擊顯示操作按鈕 ---
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth > 640) return;
+            const card = e.target.closest('.memo-card');
+            document.querySelectorAll('.memo-card.active').forEach(c => { if (c !== card) c.classList.remove('active'); });
+            if (card && !e.target.closest('button') && !e.target.closest('a')) card.classList.toggle('active');
         });
         function showFab() { if (fabBtn) fabBtn.style.display = 'flex'; }
 
