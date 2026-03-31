@@ -128,6 +128,64 @@
             white-space: pre-wrap;
             word-break: break-word;
         }
+
+        /* ========== 廣告側邊欄 ========== */
+        .ad-sidebar {
+            position: fixed; top: 0; right: 0; height: 100vh; z-index: 1000;
+            display: flex; align-items: center; pointer-events: none;
+        }
+        .ad-toggle {
+            pointer-events: auto; width: 40px; height: 52px; border: none;
+            border-radius: 12px 0 0 12px; background: rgba(18,18,40,0.94);
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.12); border-right: none;
+            color: #fff; cursor: pointer; display: flex; align-items: center;
+            justify-content: center; font-size: 1.2rem;
+            box-shadow: -4px 0 20px rgba(0,0,0,0.3); transition: background 0.3s;
+            flex-shrink: 0;
+        }
+        .ad-toggle:hover { background: rgba(30,30,60,0.96); }
+        .ad-toggle .ad-toggle-icon { display: block; }
+        .ad-toggle .ad-toggle-close { display: none; font-size: 1rem; color: rgba(255,255,255,0.6); }
+        .ad-sidebar.open .ad-toggle .ad-toggle-icon { display: none; }
+        .ad-sidebar.open .ad-toggle .ad-toggle-close { display: block; }
+        .ad-panel {
+            pointer-events: auto; width: 0; overflow: hidden;
+            background: rgba(18,18,40,0.94); backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-left: 1px solid rgba(255,255,255,0.12);
+            box-shadow: -6px 0 32px rgba(0,0,0,0.45);
+            transition: width 0.35s cubic-bezier(0.4,0,0.2,1);
+            display: flex; flex-direction: column; height: 100vh;
+        }
+        .ad-sidebar.open .ad-panel { width: 300px; }
+        .ad-panel-header { padding: 20px 20px 12px; border-bottom: 1px solid rgba(255,255,255,0.08); flex-shrink: 0; }
+        .ad-panel-title { font-size: 1rem; font-weight: 700; color: rgba(255,255,255,0.9); white-space: nowrap; }
+        .ad-panel-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; flex: 1; overflow-y: auto; }
+        .ad-card {
+            display: flex; align-items: center; gap: 14px; padding: 14px;
+            border-radius: 14px; background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08); text-decoration: none;
+            color: inherit; transition: background 0.3s, transform 0.3s, border-color 0.3s; cursor: pointer;
+        }
+        .ad-card:hover { background: rgba(255,255,255,0.1); transform: translateX(-2px); border-color: rgba(139,92,246,0.3); }
+        .ad-card-icon { flex-shrink: 0; width: 60px; height: 60px; border-radius: 14px; overflow: hidden; background: rgba(255,255,255,0.06); transition: transform 0.3s; }
+        .ad-card:hover .ad-card-icon { transform: scale(1.05); }
+        .ad-card-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .ad-card-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+        .ad-card-name { font-size: 1rem; font-weight: 700; color: rgba(255,255,255,0.9); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ad-card-desc { font-size: 0.8rem; color: rgba(255,255,255,0.45); }
+        .ad-card-arrow { flex-shrink: 0; font-size: 1.5rem; color: rgba(255,255,255,0.25); transition: color 0.3s, transform 0.3s; line-height: 1; }
+        .ad-card:hover .ad-card-arrow { color: #a78bfa; transform: translateX(3px); }
+        .ad-panel-badge { padding: 12px; text-align: center; font-size: 0.7rem; color: rgba(255,255,255,0.25); letter-spacing: 0.05em; flex-shrink: 0; border-top: 1px solid rgba(255,255,255,0.06); }
+        @media (max-width: 600px) {
+            .ad-toggle { width: 34px; height: 44px; font-size: 1rem; }
+            .ad-sidebar.open .ad-panel { width: 240px; }
+            .ad-card-icon { width: 48px; height: 48px; border-radius: 12px; }
+            .ad-card { padding: 12px; gap: 10px; }
+            .ad-card-name { font-size: 0.9rem; }
+            .ad-card-arrow { font-size: 1.3rem; }
+        }
     </style>
 </head>
 
@@ -452,18 +510,6 @@
                 </div>
             </div>
 
-            <!-- 統計摘要 -->
-            <div id="stats-bar" class="hidden glass rounded-2xl px-4 py-3 mb-4 flex items-center gap-4">
-                <span class="text-sm" style="color:rgba(255,255,255,0.55)">小計：<span id="stats-total"
-                        class="font-bold text-white">0</span></span>
-                <span class="text-sm" style="color:rgba(255,255,255,0.55)">完成：<span id="stats-done" class="font-bold"
-                        style="color:#34d399">0</span></span>
-                <div class="flex-1 rounded-full overflow-hidden h-1.5" style="background:rgba(255,255,255,0.1)">
-                    <div id="stats-bar-fill" class="h-full rounded-full transition-all"
-                        style="background:linear-gradient(90deg,#a78bfa,#34d399);width:0%"></div>
-                </div>
-                <span id="stats-pct" class="text-xs font-bold" style="color:rgba(255,255,255,0.5)">0%</span>
-            </div>
             <div class="glass rounded-2xl overflow-hidden relative">
                 <!-- 搜尋 + 分類 + 進階篩選 -->
                 <div class="p-3" style="border-bottom:1px solid rgba(255,255,255,0.08)">
@@ -537,19 +583,13 @@
     </div>
 
     <footer class="w-full text-center pb-8 mt-4 pointer-events-none flex flex-col items-center gap-3">
-        <div
-            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/60 text-slate-500 text-[11px] font-medium border border-slate-200/60 backdrop-blur-sm shadow-sm">
-            <i data-lucide="users" class="w-3.5 h-3.5"></i>
-            累積使用人次：<span id="visitor-count" class="font-mono font-bold text-slate-700 tracking-wider">--</span>
+        <div class="inline-flex items-center gap-2.5 px-5 py-2 rounded-full text-sm" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,rgba(167,139,250,0.3),rgba(124,58,237,0.3))">
+                <svg class="w-3.5 h-3.5" style="color:#a78bfa" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            </div>
+            <span style="color:rgba(255,255,255,0.4);font-weight:500">累積使用人次</span>
+            <span id="visitor-count" class="font-mono font-bold tracking-wide" style="color:rgba(255,255,255,0.85)">--</span>
         </div>
-        <a href="https://www.twainews.com.tw/" target="_blank"
-            class="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-blue-600 transition-colors bg-white/70 hover:bg-white px-5 py-2.5 rounded-full shadow-sm border border-slate-200/60 backdrop-blur-sm pointer-events-auto">
-            <img src="https://firebasestorage.googleapis.com/v0/b/memorandum-3abaa.firebasestorage.app/o/gemini-generated-image-w8bmabw8bmabw8bm-1-removebg-preview-2-1_orig.png?alt=media&token=2d3df30f-4cc7-4f28-b15c-0e3de6bdd9e1"
-                alt="TWAI Logo" class="w-5 h-5 rounded-md object-contain"
-                onerror="this.style.display='none'; document.getElementById('twai-fallback-icon').classList.remove('hidden');" />
-            <i id="twai-fallback-icon" data-lucide="zap" class="w-4 h-4 hidden"></i>
-            TWAI NEWS 製作提供
-        </a>
     </footer>
 
     <!-- 分類管理 Modal -->
@@ -936,19 +976,16 @@
             if (user) {
                 clearTimeout(authFallbackTimer);
                 isAuthReady = true; if (authContainer) authContainer.classList.remove('hidden'); lucide.createIcons();
-                const statsRef = doc(db, 'artifacts', appId, 'public', 'data', 'app_stats', 'visitor_count');
+                const statsRef = doc(db, 'counters', 'memo-tool');
                 onSnapshot(statsRef, (docSnap) => {
                     const el = document.getElementById('visitor-count');
-                    if (el) el.textContent = (docSnap.exists() ? (docSnap.data().count || 0) : 0).toLocaleString();
+                    if (el) el.textContent = (docSnap.exists() ? (docSnap.data().views || 0) : 0).toLocaleString();
                 });
-                if (!sessionStorage.getItem('twai_memo_counted')) {
-                    try {
-                        const snap = await getDoc(statsRef);
-                        if (!snap.exists()) await setDoc(statsRef, { count: 1 });
-                        else await updateDoc(statsRef, { count: increment(1) });
-                        sessionStorage.setItem('twai_memo_counted', 'true');
-                    } catch (e) { console.error(e); }
-                }
+                try {
+                    const snap = await getDoc(statsRef);
+                    if (!snap.exists()) await setDoc(statsRef, { views: 1 });
+                    else await updateDoc(statsRef, { views: increment(1) });
+                } catch (e) { console.error('Counter error:', e); }
             }
         });
         initAuth();
@@ -1046,7 +1083,7 @@
                     } else {
                         localStorage.removeItem('twai_memo_saved_account');
                     }
-                    roomCodeDisplay.textContent = currentAccountId; authContainer.classList.add('hidden'); appContainer.classList.remove('hidden');
+                    roomCodeDisplay.textContent = currentAccountId; authContainer.classList.add('hidden'); appContainer.classList.remove('hidden'); showFab();
                     // 讀取該帳號儲存的排序方式，沒有則用預設「優先級」
                     const savedSort = localStorage.getItem(SORT_STORAGE_KEY(currentAccountId));
                     const validModes = ['default', 'priority', 'newest', 'oldest', 'due', 'edited'];
@@ -1072,7 +1109,7 @@
         if (logoutBtn) logoutBtn.addEventListener('click', () => window.location.reload());
 
         // --- 收展備忘錄輸入區 ---
-        let formCollapsed = false;
+        let formCollapsed = true;
         const formCollapsible = document.getElementById('form-collapsible');
         const formToggleIcon = document.getElementById('form-toggle-icon');
         const formToggleBtn = document.getElementById('form-toggle-btn');
@@ -1086,8 +1123,9 @@
                 if (formToggleIcon) formToggleIcon.style.transform = formCollapsed ? 'rotate(180deg)' : '';
             });
         }
-        // Init: make sure it starts expanded
-        if (formCollapsible) { formCollapsible.style.maxHeight = ''; formCollapsible.style.opacity = ''; }
+        // Init: start collapsed by default
+        if (formCollapsible) { formCollapsible.style.maxHeight = '0'; formCollapsible.style.opacity = '0'; }
+        if (formToggleIcon) formToggleIcon.style.transform = 'rotate(180deg)';
 
 
 
@@ -1390,18 +1428,7 @@
         }
 
         // --- 介面渲染 ---
-        function renderStats() {
-            const bar = document.getElementById('stats-bar');
-            const total = memos.length; const done = memos.filter(m => m.completed).length;
-            if (!bar || total === 0) { if (bar) bar.classList.add('hidden'); return; }
-            bar.classList.remove('hidden');
-            const pct = Math.round(done / total * 100);
-            const tEl = document.getElementById('stats-total'); const dEl = document.getElementById('stats-done');
-            const fEl = document.getElementById('stats-bar-fill'); const pEl = document.getElementById('stats-pct');
-            if (tEl) tEl.textContent = total; if (dEl) dEl.textContent = done;
-            if (fEl) fEl.style.width = pct + '%'; if (pEl) pEl.textContent = pct + '%';
-        }
-        function renderApp() { renderStats(); renderCategorySelector(); renderFilterTabs(); renderMemos(); }
+        function renderApp() { renderCategorySelector(); renderFilterTabs(); renderMemos(); }
         function renderCategorySelector() {
             if (!categorySelector) return;
             if (categories.length === 0) categorySelector.innerHTML = '<span class="text-xs" style="color:rgba(255,255,255,0.3)">請先新增分類</span>';
@@ -1413,8 +1440,12 @@
             if (!filterTabs) return;
             const activeStyle = 'background:rgba(167,139,250,0.25);color:#c4b5fd;font-weight:700;border:1px solid rgba(167,139,250,0.4)';
             const inactiveStyle = 'background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1)';
-            let h = `<button onclick="window.setFilter('all')" class="flex-shrink-0 px-3 py-1.5 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all" style="${currentFilter === 'all' ? activeStyle : inactiveStyle}"><i data-lucide="layers" class="w-3.5 h-3.5"></i>全分類</button>`;
-            h += categories.map(c => `<button onclick="window.setFilter('${c.id}')" class="flex-shrink-0 px-3 py-1.5 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all" style="${currentFilter === c.id ? activeStyle : inactiveStyle}"><i data-lucide="${c.icon}" class="w-3.5 h-3.5"></i>${c.label}</button>`).join('');
+            const allCount = memos.length;
+            let h = `<button onclick="window.setFilter('all')" class="flex-shrink-0 px-3 py-1.5 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all" style="${currentFilter === 'all' ? activeStyle : inactiveStyle}"><i data-lucide="layers" class="w-3.5 h-3.5"></i>全部 <span class="opacity-60">${allCount}</span></button>`;
+            h += categories.map(c => {
+                const count = memos.filter(m => m.category === c.id).length;
+                return `<button onclick="window.setFilter('${c.id}')" class="flex-shrink-0 px-3 py-1.5 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all" style="${currentFilter === c.id ? activeStyle : inactiveStyle}"><i data-lucide="${c.icon}" class="w-3.5 h-3.5"></i>${c.label} <span class="opacity-60">${count}</span></button>`;
+            }).join('');
             filterTabs.innerHTML = h; lucide.createIcons();
         }
         function renderMemos() {
@@ -1479,9 +1510,22 @@
                 return (b.createdAt || 0) - (a.createdAt || 0);
             });
             clearCompletedBtn.classList.toggle('hidden', !memos.some(m => m.completed));
-            if (!filtered.length) { memoListContainer.innerHTML = '<div class="py-12 text-center text-sm" style="color:rgba(255,255,255,0.3)">尚無內容</div>'; return; }
+            if (!filtered.length) {
+                let emptyMsg = '尚無內容';
+                let emptyIcon = 'inbox';
+                if (currentSearch) { emptyMsg = `找不到符合「${currentSearch}」的備忘錄`; emptyIcon = 'search-x'; }
+                else if (currentStatusFilter === 'todo') { emptyMsg = '沒有待辦項目 🎉'; emptyIcon = 'check-circle-2'; }
+                else if (currentStatusFilter === 'done') { emptyMsg = '沒有已完成的項目'; emptyIcon = 'circle'; }
+                else if (currentStatusFilter === 'overdue') { emptyMsg = '沒有逾期項目 ✅'; emptyIcon = 'calendar-check'; }
+                else if (currentFilter !== 'all') {
+                    const catName = categories.find(c => c.id === currentFilter)?.label || '該分類';
+                    emptyMsg = `「${catName}」暫無內容`; emptyIcon = 'folder-open';
+                }
+                else if (memos.length === 0) { emptyMsg = '還沒有備忘錄，點擊右下角 ＋ 開始新增'; emptyIcon = 'plus-circle'; }
+                memoListContainer.innerHTML = `<div class="py-16 text-center" style="color:rgba(255,255,255,0.25)"><i data-lucide="${emptyIcon}" class="w-10 h-10 mx-auto mb-3" style="opacity:0.4"></i><div class="text-sm">${emptyMsg}</div></div>`;
+                lucide.createIcons(); return;
+            }
             const PRI_DOT = { high: '#f43f5e', medium: '#f59e0b', low: '#10b981' };
-            const PRI_BORDER = { high: 'priority-high', medium: 'priority-medium', low: 'priority-low' };
             const PRI_LABEL = { high: '高', medium: '中', low: '低' };
             memoListContainer.innerHTML = `<ul class="grid grid-cols-1 gap-3 p-2" id="sortable-list">` + filtered.map(m => {
                 const c = categories.find(cat => cat.id === m.category) || { label: '未分類', icon: 'help-circle', color: 'text-slate-400', bgColor: '' };
@@ -1495,14 +1539,13 @@
                         imgH = `<div class="mt-2 grid ${cols} gap-1.5" style="max-height:160px">${imgs.map(i => `<div class="rounded-lg overflow-hidden cursor-zoom-in" style="height:75px;border:1px solid rgba(255,255,255,0.1)"><img src="${i.url}" class="w-full h-full object-cover" onclick="window.openLightbox('${i.url}')"></div>`).join('')}</div>`;
                     }
                 }
-                const priCls = PRI_BORDER[m.priority] || 'priority-none';
-                const priDot = m.priority ? `<span style="color:${PRI_DOT[m.priority]};font-size:8px">⬤</span>` : '';
+                const priBadge = m.priority ? `<span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style="background:rgba(${m.priority === 'high' ? '244,63,94' : m.priority === 'medium' ? '245,158,11' : '16,185,129'},0.2);color:${PRI_DOT[m.priority]}">${PRI_LABEL[m.priority]}</span>` : '';
                 const overdue = m.dueDate && m.dueDate < today && !m.completed;
                 const dueBadge = m.dueDate ? `<span class="text-[10px] font-semibold px-1.5 py-0.5 rounded-md" style="${overdue ? 'background:rgba(244,63,94,0.2);color:#fda4af' : 'background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.45)'}">${overdue ? '⚠️ ' : '📅 '}${m.dueDate}</span>` : '';
 
                 const startBadge = m.startDate ? `<span class="text-[10px] font-semibold px-1.5 py-0.5 rounded-md" style="background:rgba(96,165,250,0.15);color:rgba(147,197,253,0.9)">🗓 ${m.startDate}</span>` : '';
                 const cardBg = m.completed ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.07)';
-                const pinnedBorder = m.pinned && !m.completed ? ';box-shadow:0 0 0 1.5px rgba(251,191,36,0.35) inset' : '';
+                const pinnedLeftBar = m.pinned && !m.completed ? 'border-left:3px solid rgba(251,191,36,0.6);' : '';
                 const pinnedBadge = m.pinned && !m.completed ? `<span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md flex items-center gap-0.5" style="background:rgba(251,191,36,0.18);color:#fbbf24"><i data-lucide="pin" class="w-2.5 h-2.5"></i>已釘選</span>` : '';
                 // 非自訂順序時隱藏拖曳把手；自訂順序模式下全部（含釘選）都可拖曳
                 const dragDisabled = currentSortMode !== 'default';
@@ -1512,30 +1555,36 @@
                 // 卡片分類 badge 用分類自己的顏色
                 const cc = getCatColor(c);
                 const catBadgeStyle = `background:${cc.bg};color:${cc.accent};border:1px solid ${cc.border}`;
-                return `<li data-id="${m.id}" data-pinned="${m.pinned ? '1' : '0'}" class="flex flex-col ${compactView ? 'px-3 py-2.5' : 'p-4'} rounded-2xl card-hover ${priCls} relative group memo-card" style="background:${cardBg};border:1px solid rgba(255,255,255,0.08);${m.completed ? 'opacity:0.55' : ''}${pinnedBorder}">
-                    <div class="flex items-start justify-between ${compactView ? 'mb-1' : 'mb-2'}">
-                        <div class="flex items-center gap-1.5">
-                            <div class="drag-handle p-1 -ml-1" style="${dragHandleStyle}"><i data-lucide="grip-vertical" class="w-3.5 h-3.5"></i></div>
-                            <button class="p-0.5 rounded-full transition-all" style="color:${m.completed ? '#60a5fa' : 'rgba(255,255,255,0.25)'}" onclick="window.toggleComplete('${m.id}')"><i data-lucide="${m.completed ? 'check-circle-2' : 'circle'}" class="${compactView ? 'w-4 h-4' : 'w-5 h-5'}"></i></button>
-                            ${priDot}
+                return `<li data-id="${m.id}" data-pinned="${m.pinned ? '1' : '0'}" class="flex flex-col ${compactView ? 'px-3 py-2.5' : 'px-4 py-3.5'} rounded-2xl card-hover relative group memo-card" style="background:${cardBg};border:1px solid ${m.completed ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.1)'};${m.completed ? 'opacity:0.5;border-style:dashed' : ''}${pinnedLeftBar}">
+                    <div class="flex items-start gap-2">
+                        <div class="flex items-center gap-1 pt-0.5 flex-shrink-0">
+                            <div class="drag-handle p-0.5 -ml-1" style="${dragHandleStyle}"><i data-lucide="grip-vertical" class="w-3 h-3"></i></div>
+                            <button class="p-0.5 rounded-full transition-all" style="color:${m.completed ? '#60a5fa' : 'rgba(255,255,255,0.25)'}" onclick="window.toggleComplete('${m.id}')"><i data-lucide="${m.completed ? 'check-circle-2' : 'circle'}" class="${compactView ? 'w-4 h-4' : 'w-[18px] h-[18px]'}"></i></button>
                         </div>
-                        <div class="flex gap-0.5">
-                            <button onclick="window.togglePin('${m.id}')" class="p-1.5 rounded-lg transition-all" title="${m.pinned ? '取消釘選' : '釘選到頂部'}" style="color:${m.pinned ? '#fbbf24' : 'rgba(255,255,255,0.2)'}${m.pinned ? ';background:rgba(251,191,36,0.15)' : ''}"><i data-lucide="pin" class="w-3.5 h-3.5"></i></button>
-                            <button onclick="window.editMemo('${m.id}')" class="p-1.5 rounded-lg transition-all" style="color:rgba(255,255,255,0.25)"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
-                            <button onclick="window.deleteMemo('${m.id}')" class="p-1.5 rounded-lg transition-all" style="color:rgba(255,255,255,0.2)"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                        <div class="flex-grow min-w-0">
+                            <div class="flex items-start justify-between gap-2">
+                                <div class="memo-text min-w-0" style="font-size:${compactView ? '12px' : '15px'};font-weight:${compactView ? '500' : '600'};color:${m.completed ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.92)'};${m.completed ? 'text-decoration:line-through' : ''};line-height:1.5;word-break:break-word">${linkify(m.text || '無內容')}</div>
+                                <div class="flex items-center gap-1 flex-shrink-0">
+                                    ${priBadge}
+                                    <div class="flex gap-0">
+                                        <button onclick="window.togglePin('${m.id}')" class="p-1 rounded-lg transition-all opacity-40 hover:opacity-100" title="${m.pinned ? '取消釘選' : '釘選到頂部'}" style="color:${m.pinned ? '#fbbf24' : 'rgba(255,255,255,0.6)'}${m.pinned ? ';opacity:1;background:rgba(251,191,36,0.12)' : ''}"><i data-lucide="pin" class="w-3.5 h-3.5"></i></button>
+                                        <button onclick="window.editMemo('${m.id}')" class="p-1 rounded-lg transition-all opacity-0 group-hover:opacity-40 hover:!opacity-100" style="color:rgba(255,255,255,0.6)"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
+                                        <button onclick="window.deleteMemo('${m.id}')" class="p-1 rounded-lg transition-all opacity-0 group-hover:opacity-40 hover:!opacity-100" style="color:rgba(255,255,255,0.6)"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            ${imgH}
+                            ${m.note && !compactView ? `<div class="mt-1 text-xs" style="color:rgba(255,255,255,0.35);white-space:pre-wrap;word-break:break-word;line-height:1.5">${linkify(m.note)}</div>` : ''}
                         </div>
                     </div>
-                    <div class="flex-grow memo-text" style="font-size:${compactView ? '12px' : '14px'};color:${m.completed ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.85)'};${m.completed ? 'text-decoration:line-through' : ''};line-height:${compactView ? '1.45' : '1.6'}">${linkify(m.text || '無內容')}${imgH}</div>
-                    ${m.note && !compactView ? `<div class="mt-1.5 text-xs italic" style="color:rgba(255,255,255,0.38);white-space:pre-wrap;word-break:break-word">${linkify(m.note)}</div>` : ''}
-                    <div class="${compactView ? 'mt-2 pt-1.5' : 'mt-3 pt-2.5'} flex items-center gap-1.5 flex-wrap" style="border-top:1px solid rgba(255,255,255,0.07)">
-                        ${compactView ? '' : `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold" style="${catBadgeStyle}"><i data-lucide="${c.icon}" class="w-3 h-3"></i>${c.label}</span>`}
-                        ${compactView ? `<span class="inline-flex items-center gap-1 text-[10px] font-semibold" style="color:${cc.accent}"><i data-lucide="${c.icon}" class="w-2.5 h-2.5"></i>${c.label}</span>` : ''}
+                    <div class="${compactView ? 'mt-2 pt-1.5' : 'mt-2.5 pt-2'} flex items-center gap-1.5 flex-wrap" style="border-top:1px solid rgba(255,255,255,0.06)">
+                        <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-semibold" style="${catBadgeStyle}"><i data-lucide="${c.icon}" class="w-2.5 h-2.5"></i>${c.label}</span>
                         ${pinnedBadge}
-                        ${compactView ? '' : startBadge}
-                        ${compactView ? '' : dueBadge}
-                        ${compactView && m.dueDate ? `<span class="text-[10px] font-semibold px-1.5 py-0.5 rounded-md" style="${overdue ? 'background:rgba(244,63,94,0.15);color:#fda4af' : 'color:rgba(255,255,255,0.3)'}">   ${overdue ? '⚠️' : '📅'} ${m.dueDate}</span>` : ''}
-                        <span class="ml-auto flex items-center gap-1.5 text-[10px]" style="color:rgba(255,255,255,0.25)">
-                            ${m.updatedAt ? `<span style="color:rgba(167,139,250,0.7)" title="最後編輯時間"><i data-lucide="pencil" class="w-2.5 h-2.5 inline-block"></i> ${formatTime(m.updatedAt)}</span>` : `${formatTime(m.createdAt)}`}
+                        ${!compactView ? startBadge : ''}
+                        ${!compactView ? dueBadge : ''}
+                        ${compactView && m.dueDate ? `<span class="text-[10px] font-semibold" style="${overdue ? 'color:#fda4af' : 'color:rgba(255,255,255,0.3)'}">${overdue ? '⚠️' : '📅'} ${m.dueDate}</span>` : ''}
+                        <span class="ml-auto text-[10px]" style="color:rgba(255,255,255,0.2)">
+                            ${m.updatedAt ? `<span style="color:rgba(167,139,250,0.6)" title="最後編輯時間"><i data-lucide="pencil" class="w-2.5 h-2.5 inline-block"></i> ${formatTime(m.updatedAt)}</span>` : `${formatTime(m.createdAt)}`}
                         </span>
                     </div>
                 </li>`;
@@ -1662,6 +1711,68 @@
         });
 
         if (clearCompletedBtn) clearCompletedBtn.addEventListener('click', () => { const done = memos.filter(m => m.completed); if (!done.length) return; showConfirm('清除已完成項目', `確定清除這 ${done.length} 筆嗎？`, async () => { for (const m of done) { const imgs = m.images || (m.imagePath ? [{ path: m.imagePath }] : []); for (const i of imgs) { if (i.path) await deleteObject(ref(storage, i.path)).catch(e => console.error(e)); } await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', currentRoomId, m.id)); } showToast('已清理', 'info'); }); });
+    
+        // --- FAB 按鈕邏輯 ---
+        const fabBtn = document.getElementById('fab-add-btn');
+        if (fabBtn) fabBtn.addEventListener('click', () => {
+            if (formCollapsed && formCollapsible) {
+                formCollapsed = false;
+                formCollapsible.style.maxHeight = '';
+                formCollapsible.style.opacity = '';
+                if (formToggleIcon) formToggleIcon.style.transform = '';
+            }
+            if (memoInput) { memoInput.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => memoInput.focus(), 300); }
+        });
+        function showFab() { if (fabBtn) fabBtn.style.display = 'flex'; }
+
+        </script>
+
+    <!-- FAB Button -->
+    <button id="fab-add-btn" title="新增備忘錄"
+        style="display:none;position:fixed;bottom:28px;right:28px;z-index:90;width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,#a78bfa,#7c3aed);color:white;box-shadow:0 4px 20px rgba(124,58,237,0.5);font-size:28px;transition:all 0.2s ease;align-items:center;justify-content:center"
+        onmouseenter="this.style.transform='scale(1.1)';this.style.boxShadow='0 6px 28px rgba(124,58,237,0.6)'"
+        onmouseleave="this.style.transform='';this.style.boxShadow='0 4px 20px rgba(124,58,237,0.5)'">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </button>
+
+    <!-- 推薦內容側邊欄 -->
+    <div class="ad-sidebar" id="ad-sidebar">
+        <button class="ad-toggle" id="ad-toggle" title="推薦內容">
+            <span class="ad-toggle-icon">⭐</span>
+            <span class="ad-toggle-close">✕</span>
+        </button>
+        <div class="ad-panel">
+            <div class="ad-panel-header"><span class="ad-panel-title">⭐ 推薦內容</span></div>
+            <div class="ad-panel-body">
+                <a class="ad-card" href="https://www.twainews.com.tw/" target="_blank" rel="noopener noreferrer">
+                    <div class="ad-card-icon"><img src="https://firebasestorage.googleapis.com/v0/b/memorandum-3abaa.firebasestorage.app/o/Gemini_Generated_Image_pnl4g6pnl4g6pnl4-removebg-preview.png?alt=media&token=bc2f8c80-d0c5-4405-90b9-19e7eb9cfdef" alt="TWAI NEWS"></div>
+                    <div class="ad-card-info"><span class="ad-card-name">TWAI NEWS</span><span class="ad-card-desc">前往最新AI新聞</span></div>
+                    <span class="ad-card-arrow">›</span>
+                </a>
+                <a class="ad-card" href="https://www.gametower.com.tw/games/pg/?utm_source=twainews&utm_medium=display&utm_campaign=mega_traffic_2026&utm_content=1st_banner" target="_blank" rel="noopener noreferrer">
+                    <div class="ad-card-icon"><img src="https://firebasestorage.googleapis.com/v0/b/memorandum-3abaa.firebasestorage.app/o/%E7%8E%A9%E6%98%9F%E6%B4%BE%E5%B0%8D.png?alt=media&token=a0d005bf-bd6c-44b4-9402-0290fafc3581" alt="玩星派對"></div>
+                    <div class="ad-card-info"><span class="ad-card-name">玩星派對</span><span class="ad-card-desc">立即前往遊戲</span></div>
+                    <span class="ad-card-arrow">›</span>
+                </a>
+                <a class="ad-card" href="https://cmj2.com.tw/?utm_source=twainews&utm_medium=display&utm_campaign=mega_traffic_2026&utm_content=2nd_banner" target="_blank" rel="noopener noreferrer">
+                    <div class="ad-card-icon"><img src="https://firebasestorage.googleapis.com/v0/b/memorandum-3abaa.firebasestorage.app/o/%E7%AB%B6%E6%8A%80%E9%BA%BB%E5%B0%872.png?alt=media&token=4e424ebb-f006-4bab-80dd-74a152b4b833" alt="競技麻將2"></div>
+                    <div class="ad-card-info"><span class="ad-card-name">競技麻將2</span><span class="ad-card-desc">立即前往遊戲</span></div>
+                    <span class="ad-card-arrow">›</span>
+                </a>
+            </div>
+            <div class="ad-panel-badge">廣告</div>
+        </div>
+    </div>
+
+    <!-- 廣告側邊欄 JS -->
+    <script>
+    (function initAdSidebar() {
+        const sidebar = document.getElementById('ad-sidebar');
+        const toggle = document.getElementById('ad-toggle');
+        if (!sidebar || !toggle) return;
+        toggle.addEventListener('click', function(e) { e.stopPropagation(); sidebar.classList.toggle('open'); });
+        document.addEventListener('click', function(e) { if (!sidebar.contains(e.target)) sidebar.classList.remove('open'); });
+    })();
     </script>
 </body>
 

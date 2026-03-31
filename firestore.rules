@@ -3,6 +3,13 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // ============================================================
+    // 頁面瀏覽計數器：counters/{toolId}
+    // ============================================================
+    match /counters/{toolId} {
+      allow read, write: if true;
+    }
+
+    // ============================================================
     // 備忘錄 App：artifacts/{appId}/public/data/...
     // ============================================================
     match /artifacts/{appId}/public/data/{document=**} {
